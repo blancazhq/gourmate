@@ -1,0 +1,101 @@
+Gourmate
+
+User functions(general users):
+  sign-up
+  change user info
+  sign-in
+  search meals
+  browse meals
+  browse user profile
+  subscribe to a host
+  add reviews to host
+  request to join a meal
+  browse joined meals
+  add reviews to meal
+  receive a message
+  send a message
+  get notification for a new message
+  get notification when subscribed host sent a new meal
+  pay for the meal
+
+Host functions:
+  register as host
+  browse listed meals
+  post a meal
+  update a meal
+  accept/decline a request to join
+  get notification when receiving a request
+  add review to guest
+  receive payment
+
+database schema:
+  userinfo: id, username, pw, name, address, city, state, phone_number, email, intro_title, intro_content, food_preference, food restrictions, token, imgurl
+  meal: id, title, date, time, address, city, state, category, regular, price, limit, taken
+  course: id, name, description, type(appetizer, entree, dessert, drink), meal_id, order
+  user_meal: user_id, meal_id, is_host
+  review_meal: id, title, content, reviewer_id, meal_id
+  review_user: id, title, content, reviewer_id, reviewee_id, is_host_review
+  user_subscribe_host: user_id, host_id
+  message: id, title, content, sender_id, receiver_id
+  shopping_cart: meal_id
+  auth_token: id, user_id, token, time_created
+  purchase: id, user_id, meal_id, quantity, time_created
+  mealimg: id, meal_id, url
+
+api:
+  get:
+    user auth
+    get host
+    get meal
+    get a message
+  post:
+    create a user
+    add a meal
+    create a request to join meal
+    subscribe to a host
+    send a message
+  put:
+    change user info
+    change request status
+    update meal info
+
+components:
+  every page
+    nav
+    footer
+  main
+    banner
+    search - search meals
+    featured meal - browse meals
+  meal - browse meals
+    image
+    info
+    menu
+    requirement
+    review
+    add review - add reviews to meal
+  user - browse user profile
+    pic
+    info
+    hosted meal list
+    review
+    add review - add reviews to host
+    subscribe if host - subscribe to a host
+  user dashboard
+    profile
+      show profile - browse user profile
+      edit profile - change user info
+    message
+      inbox - browse a message
+      send a message - send a message
+    requested meal list - browse requested meals
+    joined meal list - browse joined meals
+    make payment - pay for the meal
+    become a host - register as host
+    host dashboard
+      hosted meal list - browse listed meals
+      create a meal - post a meal
+      update meal info - update a meal
+      manage requests - accept/decline a request to join
+  sign up - create user
+  sign in - authentication
