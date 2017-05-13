@@ -3,7 +3,7 @@ let initState = {
   error: null
 };
 
-const UserReducer = (state=initState, action)=>{
+const DashboardReducer = (state=initState, action)=>{
   let nextState;
   if(action.type === "getSingleUserData"){
     nextState = Object.assign({}, state, {
@@ -18,4 +18,4 @@ const UserReducer = (state=initState, action)=>{
   }
   return nextState;
 }
-export default UserReducer;
+export default DashboardReducer;

@@ -30,17 +30,16 @@ Host functions:
 
 database schema:
   userinfo: id, username, pw, name, address, city, state, phone_number, email, intro_title, intro_content, food_preference, food restrictions, token, imgurl
-  meal: id, title, date, time, address, city, state, category, regular, price, limit, taken
+  meal: id, title, date, time, address, city, state, category, regular, price, limit, taken, host_id
   course: id, name, description, type(appetizer, entree, dessert, drink), meal_id, order
-  user_meal: user_id, meal_id, is_host
   review_meal: id, title, content, reviewer_id, meal_id
   review_user: id, title, content, reviewer_id, reviewee_id, is_host_review
   user_subscribe_host: user_id, host_id
-  message: id, title, content, sender_id, receiver_id
-  shopping_cart: meal_id
+  message: id, title, content, sender_id, receiver_id, is_read
+  shopping_cart: meal_id, quantity, user_id
   auth_token: id, user_id, token, time_created
   purchase: id, user_id, meal_id, quantity, time_created
-  mealimg: id, meal_id, url
+  mealimg: id, meal_id, url, review_id
 
 api:
   get:

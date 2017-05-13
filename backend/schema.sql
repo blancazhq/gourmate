@@ -31,8 +31,11 @@ CREATE TABLE meal (
 )
 
 CREATE TABLE shoppingcart (
+  id serial primary key,
+  user_id integer references userinfo(id),
   meal_id integer references meal(id),
-  quantity integer
+  quantity integer,
+  time_created timestamp default now()
 )
 
 CREATE TABLE auth_token (
@@ -54,4 +57,37 @@ CREATE TABLE mealimg (
   id serial primary key,
   meal_id integer references meal(id),
   url varchar
+)
+
+CREATE TABLE review_meal (
+  id serial primary key,
+  title varchar,
+  content varchar,
+  reviewer_id integer references userinfo(id),
+  meal_id integer references meal(id)
+)
+
+CREATE TABLE message (
+  id serial primary key,
+  title varchar,
+  content varchar,
+  sender_id integer references userinfo(id),
+  receiver_id integer references userinfo(id),
+  is_read boolean
+)
+
+CREATE TABLE request (
+  id serial primary key,
+  user_id integer references userinfo(id),
+  meal_id integer references meal(id),
+  quantity integer,
+  time_created timestamp default now()
+)
+
+CREATE TABLE approved (
+  id serial primary key,
+  user_id integer references userinfo(id),
+  meal_id integer references meal(id),
+  quantity integer,
+  time_created timestamp default now()
 )
