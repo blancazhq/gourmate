@@ -1,16 +1,22 @@
 import $ from "jquery";
 import { hashHistory } from "react-router";
 
-export function usernameChange(event){
+export function signOut(){
   return {
-    type: "usernameChange",
+    type: "signOut"
+  }
+}
+
+export function signinUsernameChange(event){
+  return {
+    type: "signinUsernameChange",
     value: event.target.value
   }
 }
 
-export function passwordChange(event){
+export function signinPasswordChange(event){
   return {
-    type: "passwordChange",
+    type: "signinPasswordChange",
     value: event.target.value
   }
 }

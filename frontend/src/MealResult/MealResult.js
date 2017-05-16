@@ -5,7 +5,12 @@ import {Link} from "react-router";
 
 class MealResult extends React.Component {
   componentDidMount(){
-    this.props.getMealData();
+    let searchterms = {
+      keyword: this.props.search.keyword,
+      city: this.props.search.city,
+      state: this.props.search.state
+    }
+    this.props.getMealData(searchterms);
   }
   render(){
     let data = this.props.mealresult.data;
@@ -18,8 +23,6 @@ class MealResult extends React.Component {
               <h2>{meal.title}</h2>
               <p>{meal.mealdate.slice(0, meal.mealdate.indexOf("T"))}</p>
               <p>{meal.mealtime}</p>
-              <p>{meal.category}</p>
-              {meal.regular ? <p>this is a regular meal</p> : <p>this is not a regular meal</p>}
               <p>this meal is hosted by {meal.hostname}</p>
               <Link to={"/user/"+meal.hostid}><img src={meal.profileimg} width="30"/></Link>
               <br/>
@@ -31,7 +34,6 @@ class MealResult extends React.Component {
     )
   }
 }
-
 
 
 const MealResultContainer = ReactRedux.connect(state=>state, actions)(MealResult)

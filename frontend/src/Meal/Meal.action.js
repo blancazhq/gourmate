@@ -23,6 +23,93 @@ export const getSingleMealData = (id)=> {
   }
 }
 
+export const getMealStatus =(userid, mealid, token)=> {
+  return (dispatch)=>{
+    $.ajax({
+      url: "http://localhost:3012/api/mealstatus",
+      method: "get",
+      data: {
+        userid: userid,
+        mealid: mealid,
+        token: token
+      }
+    })
+    .then((status)=>{
+      console.log("status",status)
+      dispatch({
+        type: "getMealStatus",
+        value: status
+      })
+    })
+    .catch((err)=>{
+      console.log("err",err)
+      let error = err.responseJSON && err.responseJSON.message || "there is an error"
+      dispatch({
+        type: "getMealStatusError",
+        value: error
+      })
+    })
+  }
+}
+
+export const unwatchSingleMeal = (userid, mealid, token)=>{
+ return (dispatch)=> {
+   $.ajax({
+     url: "http://localhost:3012/api/watchedmeal",
+     method: "delete",
+     data: JSON.stringify({
+       mealid: mealid,
+       userid: userid,
+       token: token
+     }),
+     contentType:" application/json"
+   })
+   .then((data)=>{
+     if(data.meal_id === Number(mealid) && data.user_id === userid){
+       dispatch({
+         type: "completeUnwatchSingleMeal"
+       })
+     }
+   })
+   .catch((err)=>{
+     let error = err.responseJSON && err.responseJSON.message || "there is an error"
+     dispatch({
+       type: "unwatchSingleMealError",
+       value: error
+     })
+   })
+ }
+}
+
+export const watchSingleMeal = (userid, mealid, token)=>{
+ return (dispatch)=> {
+   $.ajax({
+     url: "http://localhost:3012/api/watchedmeal",
+     method: "post",
+     data: JSON.stringify({
+       mealid: mealid,
+       userid: userid,
+       token: token
+     }),
+     contentType:" application/json"
+   })
+   .then((data)=>{
+     if(data.meal_id === Number(mealid) && data.user_id === userid){
+       dispatch({
+         type: "completeWatchSingleMeal"
+       })
+     }
+   })
+   .catch((err)=>{
+     let error = err.responseJSON && err.responseJSON.message || "there is an error"
+     dispatch({
+       type: "watchSingleMealError",
+       value: error
+     })
+   })
+ }
+}
+
 export const quantityChange = (event) => ({
   type: "quantityChange",
   value: event.target.value
@@ -44,7 +131,7 @@ export const requestMeal = (mealid, userid, quantity, token)=>{
     .then((data)=>{
       if(data.meal_id === Number(mealid) && data.user_id === userid){
         dispatch({
-          type: "completeAddToShoppingcart",
+          type: "completeRequestMeal",
           value: data
         })
       }
@@ -52,7 +139,7 @@ export const requestMeal = (mealid, userid, quantity, token)=>{
     .catch((err)=>{
       let error = err.responseJSON && err.responseJSON.message || "there is an error"
       dispatch({
-        type: "addToShoppingcartError",
+        type: "requestMealError",
         value: error
       })
     })

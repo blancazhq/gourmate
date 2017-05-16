@@ -6,19 +6,25 @@ import {Link} from "react-router";
 class Meal extends React.Component {
   componentDidMount(){
     this.props.getSingleMealData(this.props.params.id);
+    if(this.props.signin.signedIn){
+      this.props.getMealStatus(this.props.signin.id, this.props.params.id, this.props.signin.token)
+    }
   }
   render(){
     let data = this.props.meal.data;
+    let status = this.props.meal.status;
     let mealid = this.props.params.id;
     let currentuserid = this.props.signin.id;
     let quantity = this.props.meal.quantity;
     let token = this.props.signin.token;
     let reviewtitle = this.props.meal.reviewTitle;
     let reviewcontent = this.props.meal.reviewContent;
-    let imgs = this.props.meal.reviewImgs
+    let imgs = this.props.meal.reviewImgs;
 
     return (
       <div>
+      { status==="not watched" ? <button onClick={()=>this.props.watchSingleMeal(currentuserid, mealid, token)}>watch</button> : (status === "watched" ? <button onClick={()=>this.props.unwatchSingleMeal(currentuserid, mealid, token)}>unwatch</button> : null)}
+
       { data ?
         <div>
           <h2>{data.title}</h2>
@@ -27,11 +33,25 @@ class Meal extends React.Component {
           <p>{data.address}</p>
           <p>{data.city}</p>
           <p>{data.state}</p>
-          <p>{data.category}</p>
-          {data.regular ? <p>this is a regular meal</p> : <p>this is not a regular meal</p>}
           <p>${data.price}/person</p>
+
+          <h5>keywords: </h5>
+          {data.keyword.map((keyword)=>
+            <span>{keyword.word} </span>
+          )}
+
+          <h5>courses: </h5>
+          {data.course.map((course)=>
+            <div>
+              <p>course{course.id}: {course.name}</p>
+              <p>{course.type}</p>
+              <p>{course.description}</p>
+            </div>
+          )}
+
           <p>this meal can have at most {data.peoplelimit} people</p>
-          <p>{data.spottaken} spots have been taken</p>
+          <p>{data.guest ? data.guest.map(guest=>guest.quantity).reduce(((a, b)=>a+b), 0) : 0} spots has been taken</p>
+          <p>{data.guest ? data.peoplelimit-data.guest.map(guest=>guest.quantity).reduce(((a, b)=>a+b), 0) : data.peoplelimit} spots remaining</p>
           <p>this meal is hosted by {data.hostname}</p>
           <Link to={"/user/"+data.hostid}><img src={data.profileimg} width="50"/></Link>
           <br/>
@@ -39,7 +59,7 @@ class Meal extends React.Component {
             <img src={url} height="300px"/>
           )}<br/>
 
-          <input type="number" onChange={this.props.quantityChange} value={this.props.meal.quantity}/><label> people are going</label>
+          <input type="number" onChange={this.props.quantityChange} value={this.props.meal.quantity} max={data.guest ? data.peoplelimit-data.guest.map(guest=>guest.quantity).reduce(((a, b)=>a+b), 0) : data.peoplelimit}/><label> people are going</label>
           {this.props.signin.signedIn ? <button onClick={()=>  this.props.requestMeal(mealid, currentuserid, quantity, token)}>join this meal</button> : <Link to="/signin"><button>join this meal</button></Link>}
 
           <p>People who are going: </p>

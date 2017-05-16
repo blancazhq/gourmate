@@ -30,13 +30,6 @@ CREATE TABLE meal (
   spottaken integer
 )
 
-CREATE TABLE shoppingcart (
-  id serial primary key,
-  user_id integer references userinfo(id),
-  meal_id integer references meal(id),
-  quantity integer,
-  time_created timestamp default now()
-)
 
 CREATE TABLE auth_token (
   id serial primary key,
@@ -45,13 +38,6 @@ CREATE TABLE auth_token (
   time_created timestamp default now()
 )
 
-CREATE TABLE purchase (
-  id serial primary key,
-  user_id integer references userinfo(id),
-  meal_id integer references meal(id),
-  quantity integer,
-  time_created timestamp default now()
-)
 
 CREATE TABLE mealimg (
   id serial primary key,
@@ -76,18 +62,26 @@ CREATE TABLE message (
   is_read boolean
 )
 
-CREATE TABLE request (
+CREATE TABLE meal_user (
   id serial primary key,
   user_id integer references userinfo(id),
   meal_id integer references meal(id),
   quantity integer,
-  time_created timestamp default now()
+  time_created timestamp default now(),
+  status, varchar
 )
 
-CREATE TABLE approved (
+CREATE TABLE meal_course (
   id serial primary key,
-  user_id integer references userinfo(id),
+  name varchar,
+  description varchar,
+  type varchar,
   meal_id integer references meal(id),
-  quantity integer,
-  time_created timestamp default now()
+  courseorder integer
+)
+
+CREATE TABLE meal_keyword (
+  id serial primary key,
+  word varchar,
+  meal_id integer references meal(id)
 )

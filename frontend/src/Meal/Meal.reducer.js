@@ -20,15 +20,39 @@ const MealReducer = (state=initState, action)=>{
     nextState = Object.assign({}, state, {
       error: action.value
     })
+  }else if(action.type === "getMealStatus"){
+    nextState = Object.assign({}, state, {
+      status: action.value
+    })
+  }else if(action.type === "getMealStatusError"){
+    nextState = Object.assign({}, state, {
+      error: action.value
+    })
+  }else if(action.type === "completeWatchSingleMeal"){
+    nextState = Object.assign({}, state, {
+      status: "watched"
+    })
+  }else if(action.type === "watchSingleMealError"){
+    nextState = Object.assign({}, state, {
+      error: action.value
+    })
+  }else if(action.type === "completeUnwatchSingleMeal"){
+    nextState = Object.assign({}, state, {
+      status: "not watched"
+    })
+  }else if(action.type === "unwatchSingleMealError"){
+    nextState = Object.assign({}, state, {
+      error: action.value
+    })
   }else if(action.type === "quantityChange"){
     nextState = Object.assign({}, state, {
       quantity: action.value
     })
-  }else if(action.type === "completeAddToShoppingcart"){
+  }else if(action.type === "completeRequestMeal"){
     nextState = Object.assign({}, state, {
       peopleWantToJoin: action.value.quantity
     })
-  }else if(action.type === "addToShoppingcartError"){
+  }else if(action.type === "requestMealError"){
     nextState = Object.assign({}, state, {
       error: action.value
     })

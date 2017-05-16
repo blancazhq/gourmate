@@ -36,9 +36,9 @@ database schema:
   review_user: id, title, content, reviewer_id, reviewee_id, is_host_review
   user_subscribe_host: user_id, host_id
   message: id, title, content, sender_id, receiver_id, is_read
-  shopping_cart: meal_id, quantity, user_id
+  meal_user: id, meal_id, quantity, user_id, time_created, status
   auth_token: id, user_id, token, time_created
-  purchase: id, user_id, meal_id, quantity, time_created
+ quantity, time_created
   mealimg: id, meal_id, url, review_id
 
 api:

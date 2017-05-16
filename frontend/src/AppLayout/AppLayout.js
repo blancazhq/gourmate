@@ -9,7 +9,7 @@ const AppLayout = (props)=>
       <IndexLink to="/"><h1>Gourmate</h1></IndexLink>
       <ul>
         {props.signup.signedUp || props.signin.signedIn ? null : <Link to="/signup"><li>Sign Up</li></Link>}
-        {props.signin.signedIn ? null : <Link to="/signin"><li>Sign In</li></Link>}
+        {props.signin.signedIn ? <Link to="/signin"><li>Sign Out</li></Link> : <Link to="/signin"><li>Sign In</li></Link>}
         {props.signin.signedIn ? <Link to="/dashboard"><li>Dashboard</li></Link> : null}
       </ul>
       <p>{props.signin.message}</p>

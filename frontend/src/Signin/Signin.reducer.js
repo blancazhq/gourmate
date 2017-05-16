@@ -4,16 +4,17 @@ const initState = {
   password: null,
   message: null,
   error: null,
-  token: null
+  token: null,
+  ishost: null
 }
 
 const SigninReducer = (state = initState, action) => {
  let nextState;
- if(action.type==="usernameChange"){
+ if(action.type==="signinUsernameChange"){
    nextState = Object.assign({}, state, {
      username: action.value
    })
- }else if(action.type==="passwordChange"){
+ }else if(action.type==="signinPasswordChange"){
    nextState = Object.assign({}, state, {
      password: action.value
    })
@@ -30,7 +31,18 @@ const SigninReducer = (state = initState, action) => {
      message: "welcome " + state.username + "!",
      signedIn: true,
      token: action.value.token,
-     id: action.value.id
+     id: action.value.id,
+     ishost: action.value.is_host
+   })
+ }else if(action.type==="signOut"){
+   nextState = Object.assign({}, state, {
+     id: null,
+     signedIn: false,
+     username: null,
+     password: null,
+     message: null,
+     error: null,
+     token: null
    })
  }else{
    nextState = Object.assign({}, state)

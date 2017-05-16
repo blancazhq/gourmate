@@ -11,8 +11,8 @@ class Dashboard extends React.Component {
           <IndexLink to={"/dashboard"}><li>Profile</li></IndexLink>
           <Link to={"/dashboard/message"}><li>Message</li></Link>
           <Link to={"/dashboard/meallist"}><li>Meal List</li></Link>
-          <Link to={"/dashboard/becomeahost"}><li>Become a Host</li></Link>
-          <Link to={"/dashboard/hostdashboard"}><li>Host Dashboard</li></Link>
+          {this.props.signin.ishost||this.props.becomeahost.ishost ? null : <Link to={"/dashboard/becomeahost"}><li>Become a Host</li></Link>}
+          {this.props.signin.ishost||this.props.becomeahost.ishost ? <Link to={"/dashboard/hostdashboard"}><li>Host Dashboard</li></Link> : null}
         </ul>
         {this.props.children}
       </div>

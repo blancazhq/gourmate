@@ -1,22 +1,25 @@
 import $ from "jquery";
 
-export const getMealData = (searchterms)=> {
+export const getHostedMealData = (id, token)=> {
   return (dispatch)=>{
     $.ajax({
-      url: "http://localhost:3012/api/meals",
+      url: "http://localhost:3012/api/hostedmeal",
       method: "get",
-      data: searchterms
+      data: {
+        id: id,
+        token: token
+      }
     })
     .then((data)=>{
       dispatch({
-        type: "getMealData",
+        type: "getHostedMealData",
         value: data
       })
     })
     .catch((err)=>{
       let error = err.responseJSON && err.responseJSON.message || "there is an error"
       dispatch({
-        type: "getMealDataError",
+        type: "getHostedMealDataError",
         value: error
       })
     })
