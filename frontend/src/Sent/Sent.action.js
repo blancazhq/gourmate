@@ -1,9 +1,10 @@
 import $ from "jquery";
+import BASEURL from "../baseurl";
 
 export const getSentData = (id, token)=> {
   return (dispatch)=>{
     $.ajax({
-      url: "http://localhost:3012/api/message/sent",
+      url: `${BASEURL}/api/message/sent`,
       method: "get",
       data: {
         id: id,

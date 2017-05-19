@@ -10,15 +10,23 @@ class Signin extends React.Component{
   }
   render(){
     return (
-        !this.props.signin.signedIn? <div>
-          <p>sign in</p>
-          <label>username</label><input type="text" value={this.props.signin.username}
-          onChange={this.props.signinUsernameChange}/>
-          <label>password</label><input type="password" value={this.props.signin.password}
-          onChange={this.props.signinPasswordChange}/>
-          <button onClick={()=>this.props.signIn(this.props.signin.username, this.props.signin.password)}>SignIn</button>
-          <p>{this.props.signin.message}</p>
-          <p>{this.props.signin.error}</p>
+        !this.props.signin.signedIn? <div id="signin_wrapper">
+          <div id="signin_content_div" className="cf">
+            <h4>sign in</h4>
+            <div id="signin_label_div">
+              <label>username</label>
+              <label>password</label>
+            </div>
+            <div id="signin_input_div">
+              <input type="text" value={this.props.signin.username}
+              onChange={this.props.signinUsernameChange}/>
+              <input type="password" value={this.props.signin.password}
+              onChange={this.props.signinPasswordChange}/>
+            </div>
+            <button onClick={()=>this.props.signIn(this.props.signin.username, this.props.signin.password)}>SignIn</button>
+            <p>{this.props.signin.message}</p>
+            <p>{this.props.signin.error}</p>
+          </div>
         </div> : <p>{this.props.signin.message}</p>
     )
   }

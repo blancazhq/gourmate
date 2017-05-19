@@ -1,9 +1,10 @@
 import $ from "jquery";
+import BASEURL from "../baseurl";
 
 export const getManageRequestData = (id, token)=> {
   return (dispatch)=>{
     $.ajax({
-      url: "http://localhost:3012/api/managerequest",
+      url: `${BASEURL}/api/managerequest`,
       method: "get",
       data: {
         id: id,
@@ -33,7 +34,7 @@ export const acceptRequest = (idx, mealid, userid, token)=>{
   return (dispatch)=> {
     console.log(idx, mealid, userid, token)
     $.ajax({
-      url: "http://localhost:3012/api/acceptrequest",
+      url: `${BASEURL}/api/acceptrequest`,
       method: "post",
       data: JSON.stringify({
         mealid: mealid,
@@ -64,7 +65,7 @@ export const acceptRequest = (idx, mealid, userid, token)=>{
 export const declineRequest = (idx, mealid, userid, token)=>{
   return (dispatch)=> {
     $.ajax({
-      url: "http://localhost:3012/api/declinerequest",
+      url: `${BASEURL}/api/declinerequest`,
       method: "post",
       data: JSON.stringify({
         mealid: mealid,

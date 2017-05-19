@@ -1,10 +1,11 @@
 import $ from "jquery";
 import { hashHistory } from "react-router";
+import BASEURL from "../baseurl";
 
 export function becomeAHost (userid, token) {
   return function(dispatch){
     $.ajax({
-      url: "http://localhost:3012/api/becomeahost",
+      url: `${BASEURL}/api/becomeahost`,
       method: "post",
       data: JSON.stringify({
         userid: userid,

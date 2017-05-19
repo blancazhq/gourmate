@@ -1,9 +1,10 @@
 import $ from "jquery";
+import BASEURL from "../baseurl";
 
 export const getWatchedMealData = (id, token)=> {
   return (dispatch)=>{
     $.ajax({
-      url: "http://localhost:3012/api/watchedmeal",
+      url: `${BASEURL}/api/watchedmeal`,
       method: "get",
       data: {
         id: id,
@@ -38,7 +39,7 @@ export const watchedMealQuantityChange = (event)=>({
 export const requestWatchedMeal = (idx, mealid, userid, quantity, token)=>{
   return (dispatch)=> {
     $.ajax({
-      url: "http://localhost:3012/api/requestmeal",
+      url: `${BASEURL}/api/requestmeal`,
       method: "post",
       data: JSON.stringify({
         mealid: mealid,
@@ -69,7 +70,7 @@ export const requestWatchedMeal = (idx, mealid, userid, quantity, token)=>{
 export const unwatchMeal = (idx, userid, mealid, token)=>{
  return (dispatch)=> {
    $.ajax({
-     url: "http://localhost:3012/api/watchedmeal",
+     url: `${BASEURL}/api/watchedmeal`,
      method: "delete",
      data: JSON.stringify({
        mealid: mealid,
@@ -99,7 +100,7 @@ export const unwatchMeal = (idx, userid, mealid, token)=>{
 export const watchMeal = (idx, userid, mealid, token)=>{
  return (dispatch)=> {
    $.ajax({
-     url: "http://localhost:3012/api/watchedmeal",
+     url: `${BASEURL}/api/watchedmeal`,
      method: "post",
      data: JSON.stringify({
        mealid: mealid,

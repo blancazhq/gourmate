@@ -1,9 +1,10 @@
 import $ from "jquery";
+import BASEURL from "../baseurl";
 
 export const getRequestedMealData = (id, token)=> {
   return (dispatch)=>{
     $.ajax({
-      url: "http://localhost:3012/api/requestedmeal",
+      url: `${BASEURL}/api/requestedmeal`,
       method: "get",
       data: {
         id: id,

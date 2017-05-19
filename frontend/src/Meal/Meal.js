@@ -3,6 +3,7 @@ import * as ReactRedux from "react-redux";
 import * as actions from "./Meal.action"
 import {Link} from "react-router";
 
+
 class Meal extends React.Component {
   componentDidMount(){
     this.props.getSingleMealData(this.props.params.id);
@@ -19,78 +20,100 @@ class Meal extends React.Component {
     let token = this.props.signin.token;
     let reviewtitle = this.props.meal.reviewTitle;
     let reviewcontent = this.props.meal.reviewContent;
+    let reviewstar = this.props.meal.reviewStar;
     let imgs = this.props.meal.reviewImgs;
 
     return (
       <div>
-      { status==="not watched" ? <button onClick={()=>this.props.watchSingleMeal(currentuserid, mealid, token)}>watch</button> : (status === "watched" ? <button onClick={()=>this.props.unwatchSingleMeal(currentuserid, mealid, token)}>unwatch</button> : null)}
 
       { data ?
-        <div>
-          <h2>{data.title}</h2>
-          <p>{data.mealdate.slice(0, data.mealdate.indexOf("T"))}</p>
-          <p>{data.mealtime}</p>
-          <p>{data.address}</p>
-          <p>{data.city}</p>
-          <p>{data.state}</p>
-          <p>${data.price}/person</p>
+        <div id="meal_wrapper" className="cf">
 
-          <h5>keywords: </h5>
-          {data.keyword.map((keyword)=>
-            <span>{keyword.word} </span>
-          )}
+          <div id="meal_main_img_div">
+            <img src={data.mealimg[0]}/>
+          </div>
+          <div id="meal_info_div">
+            <h2>{data.title}</h2>
+            { status==="not watched" && currentuserid !==data.hostid ? <button onClick={()=>this.props.watchSingleMeal(currentuserid, mealid, token)}>watch</button> : (status === "watched" ? <button onClick={()=>this.props.unwatchSingleMeal(currentuserid, mealid, token)}>unwatch</button> : null)}
+            <h4>keywords: {data.keyword.map((keyword)=>
+              <span>{keyword.word} </span>
+            )}</h4>
+            <p>{data.mealdate.slice(0, data.mealdate.indexOf("T"))} {data.mealtime}</p>
+            <p>{data.address}, {data.city}, {data.state}</p>
+            <p>${data.price}/person</p>
+            <p>this meal can have at most {data.peoplelimit} people</p>
+            <p>{data.guest ? data.peoplelimit-data.guest.map(guest=>guest.quantity).reduce(((a, b)=>a+b), 0) : data.peoplelimit} spots remaining</p>
+            <p>this meal is hosted by {data.hostname}</p>
+            <Link to={"/user/"+data.hostid}><img src={data.profileimg} height="50px"/></Link>
+          </div>
 
-          <h5>courses: </h5>
-          {data.course.map((course)=>
+          <div id="meal_course_div">
+          <h4>menu: </h4>
+          {data.course.map((course, idx)=>
             <div>
-              <p>course{course.id}: {course.name}</p>
+              <p>{idx+1}: {course.name}</p>
               <p>{course.type}</p>
               <p>{course.description}</p>
             </div>
           )}
+          </div>
 
-          <p>this meal can have at most {data.peoplelimit} people</p>
-          <p>{data.guest ? data.guest.map(guest=>guest.quantity).reduce(((a, b)=>a+b), 0) : 0} spots has been taken</p>
-          <p>{data.guest ? data.peoplelimit-data.guest.map(guest=>guest.quantity).reduce(((a, b)=>a+b), 0) : data.peoplelimit} spots remaining</p>
-          <p>this meal is hosted by {data.hostname}</p>
-          <Link to={"/user/"+data.hostid}><img src={data.profileimg} width="50"/></Link>
-          <br/>
-          {data.mealimg.map((url)=>
-            <img src={url} height="300px"/>
-          )}<br/>
 
-          <input type="number" onChange={this.props.quantityChange} value={this.props.meal.quantity} max={data.guest ? data.peoplelimit-data.guest.map(guest=>guest.quantity).reduce(((a, b)=>a+b), 0) : data.peoplelimit}/><label> people are going</label>
-          {this.props.signin.signedIn ? <button onClick={()=>  this.props.requestMeal(mealid, currentuserid, quantity, token)}>join this meal</button> : <Link to="/signin"><button>join this meal</button></Link>}
+          <div id="meal_other_img_div">
+          {data.mealimg.map((url, idx)=> {
+            if(idx!==0){
+              return <img src={url}/>
+            }
+          })}
+          </div>
 
-          <p>People who are going: </p>
-          {data.guest.map((guest)=>
-            <p><Link to={"/user/"+guest.user_id}>{guest.name}</Link>&#39;s party of {guest.quantity}</p>
-          )}
+          <div id="meal_join_info_div">
+            <div id="meal_join_div">
+              <div id="meal_join_content_div">
+                <h4>Interested? Join this meal</h4>
+                <label>guest number: </label><input id="join_meal_number" type="number" onChange={this.props.quantityChange} value={this.props.meal.quantity} max={data.guest ? data.peoplelimit-data.guest.map(guest=>guest.quantity).reduce(((a, b)=>a+b), 0) : data.peoplelimit}/>
+                {this.props.meal.peopleWantToJoin>0 ? <p>your party of {this.props.meal.peopleWantToJoin} is ready to go!</p> :null}
+              </div>
+              {this.props.signin.signedIn ? <button onClick={()=>  this.props.requestMeal(mealid, currentuserid, quantity, token)}>join this meal</button> : <Link to="/signin"><button>join this meal</button></Link>}
+            </div>
 
-          {this.props.meal.peopleWantToJoin>0 ? <p>your party of {this.props.meal.peopleWantToJoin} is ready to go!</p> :null}
+            <div id="meal_people_going_div">
+            <p>People who are also going: </p>
+            {data.guest.map((guest)=>
+              <p><Link to={"/user/"+guest.user_id}>{guest.name}</Link>&#39;s party of {guest.quantity}</p>
+            )}
+            </div>
+          </div>
 
+          <div id="meal_review_div">
           <h3>reviews</h3>
           {data.review.map((review)=>
             <div>
-              <h5>{review.title}</h5>
+              <h4>{review.title}</h4>
+              <div className={"meal_review_display_star star"+review.star}></div>
               <Link to={"/user/"+review.reviewerid}><p>{review.reviewername}</p></Link>
               <p>{review.content}</p>
-              {review.img.map((url)=><img src={url} height="150px"/>)}
+              {review.img.map((url)=><img className="meal_review_img" src={url}/>)}
             </div>
           )}
-          {this.props.signin.signedIn ? <button onClick={this.props.toggleReview}>Were in this meal? Write a review</button> : <Link to="/signin"><button>Were in this meal? Write a review</button></Link>}
+          {this.props.signin.signedIn ? <button onClick={this.props.toggleReview}>write a review</button> : <Link to="/signin"><button>write a review</button></Link>}
 
           {this.props.meal.reviewing ?
-            <div>
-            <label>Title</label>
-            <input value={this.props.meal.reviewTitle} onChange={this.props.reviewTitleChange}/>
-            <label>Content</label>
-            <textarea value={this.props.meal.reviewContent} onChange={this.props.reviewContentChange} rows="4" cols="50"/>
-            <button onClick={this.props.uploadReviewPicture}>upload pictures</button>
-            <button onClick={()=>this.props.submitReview(reviewtitle, reviewcontent, currentuserid, mealid, imgs, token)}>submit review</button>
+            <div id="meal_writereview_div">
+            <div id="meal_writereview_content_div">
+              <p>Title</p>
+              <input value={this.props.meal.reviewTitle} onChange={this.props.reviewTitleChange}/>
+              <p>Content</p>
+              <input value={this.props.meal.reviewContent} onChange={this.props.reviewContentChange}/>
+            </div>
+            <div id="meal_writereview_botton_div">
+              <div id="meal_review_star" className={"star"+this.props.meal.reviewStar} onClick={this.props.reviewStarChange}></div>
+              <button onClick={this.props.uploadReviewPicture}>upload pictures</button>
+              <button onClick={()=>this.props.submitReview(reviewtitle, reviewcontent, currentuserid, mealid, imgs, reviewstar, token)}>submit review</button>
+            </div>
           </div> : null}
-
           {this.props.meal.reviewed ? <p>You have already reviewed this meal.</p>: null}
+          </div>
         </div>
         : null
       }

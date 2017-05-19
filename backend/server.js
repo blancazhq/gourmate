@@ -19,11 +19,19 @@ app.get("/api/meals", function(req, res, next){
   let city = req.query.city;
   let state = req.query.state;
 
-  db.any(`select distinct on (meal_keyword.id) meal.id, title, mealdate, mealtime, meal.address, meal.city, meal.state, price, peoplelimit, spottaken, url as mealimg, userinfo.id as hostid, name as hostname, imgurl as profileimg, word as keyword from meal left outer join meal_keyword on meal_keyword.meal_id = meal.id left outer join mealimg on meal.id = mealimg.meal_id inner join userinfo on meal.host_id = userinfo.id where meal_keyword.word ilike $1 and meal.city ilike $2 and meal.state ilike $3`,[`%${keyword}%`,`%${city}%`, state])
-   .then(data => {
-     res.json(data)
-   })
-   .catch(next)
+  if(!keyword){
+    db.any(`select distinct on (meal.id) meal.id, title, content, mealdate, mealtime, meal.address, meal.city, meal.state, price, peoplelimit, spottaken, url as mealimg, userinfo.id as hostid, name as hostname, imgurl as profileimg from meal left outer join mealimg on meal.id = mealimg.meal_id inner join userinfo on meal.host_id = userinfo.id where meal.city ilike $1 and meal.state ilike $2 limit 9`,[`%${city}%`, `%${state}%`])
+     .then(data => {
+       res.json(data)
+     })
+     .catch(next)
+  }else{
+    db.any(`select distinct on (meal_keyword.id) meal.id, title,content, mealdate, mealtime, meal.address, meal.city, meal.state, price, peoplelimit, spottaken, url as mealimg, userinfo.id as hostid, name as hostname, imgurl as profileimg, word as keyword from meal left outer join meal_keyword on meal_keyword.meal_id = meal.id left outer join mealimg on meal.id = mealimg.meal_id inner join userinfo on meal.host_id = userinfo.id where meal_keyword.word ilike $1 and meal.city ilike $2 and meal.state ilike $3`,[`%${keyword}%`,`%${city}%`, `%${state}%`])
+     .then(data => {
+       res.json(data)
+     })
+     .catch(next)
+  }
 })
 
 app.get("/api/meals/:id", function(req, res, next){
@@ -36,7 +44,7 @@ app.get("/api/meals/:id", function(req, res, next){
         urls.forEach((url)=>{
           data.mealimg.push(url.url)
         })
-        return db.any(`select review_meal.id as reviewid, title, content, userinfo.id as reviewerid, userinfo.name as reviewername from review_meal inner join userinfo on review_meal.reviewer_id = userinfo.id where meal_id = $1`, id)
+        return db.any(`select review_meal.id as reviewid, title, content,star, userinfo.id as reviewerid, userinfo.name as reviewername from review_meal inner join userinfo on review_meal.reviewer_id = userinfo.id where meal_id = $1`, id)
       })
       .then((reviews) => {
         let promises = [];
@@ -151,10 +159,7 @@ app.post("/api/user/signin", function(req, res, next){
     if(user){
       return bcrypt.compare(password, user.pw)
     }else{
-      res.status(401);
-      res.json({
-        message: "user not found"
-      })
+      res.json("user not found")
     }
   })
   .then((match)=>{
@@ -165,10 +170,7 @@ app.post("/api/user/signin", function(req, res, next){
          res.json(current_user)
        })
     }else{
-      res.status(401);
-      res.json({
-        message: 'Wrong Password'
-      });
+      res.json('wrong password');
     }
   })
   .catch(next)
@@ -233,14 +235,17 @@ app.post("/api/review", function(req, res, next){
   let content = req.body.content;
   let userid = req.body.userid;
   let mealid = req.body.mealid;
-  let imgs = req.body.imgs
+  let star = req.body.star;
+  let imgs = req.body.imgs;
 
-  db.one(`insert into review_meal values (default, $1, $2, $3, $4) returning *`, [title, content, userid, mealid])
+  db.one(`insert into review_meal values (default, $1, $2, $3, $4, $5) returning *`, [title, content, userid, mealid, star])
     .then((entry)=>{
       if(entry){
         let reviewid = entry.id;
-        let promises = imgs.map((img)=>db.none(`insert into mealimg values (default, $1, $2, $3)`, [mealid, img, reviewid]))
-        return Promise.all(promises);
+        if(imgs){
+          let promises = imgs.map((img)=>db.none(`insert into mealimg values (default, $1, $2, $3)`, [mealid, img, reviewid]))
+          return Promise.all(promises);
+        }
       }
     })
     .then(()=>{

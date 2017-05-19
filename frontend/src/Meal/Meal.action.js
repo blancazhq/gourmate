@@ -1,10 +1,11 @@
 import $ from "jquery";
 import {hashHistory} from "react-router"
+import BASEURL from "../baseurl";
 
 export const getSingleMealData = (id)=> {
   return (dispatch)=>{
     $.ajax({
-      url: "http://localhost:3012/api/meals/"+id,
+      url: BASEURL+"/api/meals/"+id,
       method: "get"
     })
     .then((data)=>{
@@ -26,7 +27,7 @@ export const getSingleMealData = (id)=> {
 export const getMealStatus =(userid, mealid, token)=> {
   return (dispatch)=>{
     $.ajax({
-      url: "http://localhost:3012/api/mealstatus",
+      url: `${BASEURL}/api/mealstatus`,
       method: "get",
       data: {
         userid: userid,
@@ -35,14 +36,12 @@ export const getMealStatus =(userid, mealid, token)=> {
       }
     })
     .then((status)=>{
-      console.log("status",status)
       dispatch({
         type: "getMealStatus",
         value: status
       })
     })
     .catch((err)=>{
-      console.log("err",err)
       let error = err.responseJSON && err.responseJSON.message || "there is an error"
       dispatch({
         type: "getMealStatusError",
@@ -55,7 +54,7 @@ export const getMealStatus =(userid, mealid, token)=> {
 export const unwatchSingleMeal = (userid, mealid, token)=>{
  return (dispatch)=> {
    $.ajax({
-     url: "http://localhost:3012/api/watchedmeal",
+     url: `${BASEURL}/api/watchedmeal`,
      method: "delete",
      data: JSON.stringify({
        mealid: mealid,
@@ -84,7 +83,7 @@ export const unwatchSingleMeal = (userid, mealid, token)=>{
 export const watchSingleMeal = (userid, mealid, token)=>{
  return (dispatch)=> {
    $.ajax({
-     url: "http://localhost:3012/api/watchedmeal",
+     url: `${BASEURL}/api/watchedmeal`,
      method: "post",
      data: JSON.stringify({
        mealid: mealid,
@@ -118,7 +117,7 @@ export const quantityChange = (event) => ({
 export const requestMeal = (mealid, userid, quantity, token)=>{
   return (dispatch)=> {
     $.ajax({
-      url: "http://localhost:3012/api/requestmeal",
+      url: `${BASEURL}/api/requestmeal`,
       method: "post",
       data: JSON.stringify({
         mealid: mealid,
@@ -160,6 +159,10 @@ export const reviewContentChange = (event) => ({
   value: event.target.value
 })
 
+export const reviewStarChange = () => ({
+  type: "reviewStarChange"
+})
+
 export function uploadReviewPicture(event){
   return function(dispatch){
     window.cloudinary.openUploadWidget({ cloud_name: 'dpcq8lowe', upload_preset: 'hykaf5ji',max_file_size: 750000},
@@ -183,10 +186,10 @@ export function uploadReviewPicture(event){
   }
 }
 
-export const submitReview = (title, content, userid, mealid, imgs, token) => {
+export const submitReview = (title, content, userid, mealid, imgs, star, token) => {
   return (dispatch)=> {
    $.ajax({
-     url: "http://localhost:3012/api/review",
+     url: `${BASEURL}/api/review`,
      method: "post",
      data: JSON.stringify({
        title: title,
@@ -194,6 +197,7 @@ export const submitReview = (title, content, userid, mealid, imgs, token) => {
        mealid: mealid,
        userid: userid,
        imgs: imgs,
+       star: star,
        token: token
      }),
      contentType:" application/json"
@@ -204,7 +208,7 @@ export const submitReview = (title, content, userid, mealid, imgs, token) => {
          type: "completeAddReview"
        })
        $.ajax({
-         url: "http://localhost:3012/api/meals/"+mealid,
+         url: BASEURL+"/api/meals/"+mealid,
          method: "get"
        })
        .then((data)=>{

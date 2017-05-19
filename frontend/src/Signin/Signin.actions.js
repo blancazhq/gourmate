@@ -1,5 +1,6 @@
 import $ from "jquery";
 import { hashHistory } from "react-router";
+import BASEURL from "../baseurl";
 
 export function signOut(){
   return {
@@ -24,7 +25,7 @@ export function signinPasswordChange(event){
 export function signIn (username, password) {
   return function(dispatch){
     $.ajax({
-      url: "http://localhost:3012/api/user/signin",
+      url: `${BASEURL}/api/user/signin`,
       method: "post",
       data: JSON.stringify({
         username: username,
@@ -37,7 +38,7 @@ export function signIn (username, password) {
         dispatch({
           type: "wrongPassword"
         })
-      }else if(data === "username doesn't exist"){
+      }else if(data === "user not found"){
         dispatch({
           type: "wrongUsername"
         })

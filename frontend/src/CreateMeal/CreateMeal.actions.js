@@ -1,6 +1,7 @@
 import $ from "jquery";
 import { hashHistory } from "react-router";
 const cloudinary = window.cloudinary;
+import BASEURL from "../baseurl";
 
 export function introtitleChange(event){
   return {
@@ -130,7 +131,7 @@ export function mealimguploadChange(event){
 export function createMeal(data){
   return function(dispatch){
     $.ajax({
-      url: "http://localhost:3012/api/createmeal",
+      url: `${BASEURL}/api/createmeal`,
       method: "post",
       data: JSON.stringify(data),
       contentType: "application/json"

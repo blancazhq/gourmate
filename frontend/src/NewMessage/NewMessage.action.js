@@ -1,5 +1,6 @@
 import $ from "jquery";
 import {hashHistory} from "react-router";
+import BASEURL from "../baseurl";
 
 export const messageNameChange = (event, name)=> {
   return (dispatch)=>{
@@ -8,7 +9,7 @@ export const messageNameChange = (event, name)=> {
       value: event.target.value
     })
     $.ajax({
-      url: "http://localhost:3012/api/finduser",
+      url: `${BASEURL}/api/finduser`,
       method: "get",
       data: {
         name: name
@@ -50,7 +51,7 @@ export const sendMessage = (title, content, senderid, receiverid, token) => {
   console.log(title, content, senderid, receiverid, token)
   return (dispatch) => {
     $.ajax({
-      url: "http://localhost:3012/api/message",
+      url: `${BASEURL}/api/message`,
       method: "post",
       data: JSON.stringify({
         title: title,
@@ -62,8 +63,6 @@ export const sendMessage = (title, content, senderid, receiverid, token) => {
       contentType: "application/json"
     })
     .then((data)=>{
-      console.log(data.receiver_id)
-      console.log(receiverid)
       if(data.receiver_id === receiverid){
         dispatch({
           type: "doneSendingMessage"

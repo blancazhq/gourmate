@@ -7,7 +7,8 @@ let initState = {
   reviewed: false,
   reviewTitle: null,
   reviewContent: null,
-  reviewImgs: null
+  reviewImgs: null,
+  reviewStar: 5
 };
 
 const MealReducer = (state=initState, action)=>{
@@ -67,6 +68,14 @@ const MealReducer = (state=initState, action)=>{
   }else if(action.type === "reviewContentChange"){
     nextState = Object.assign({}, state, {
       reviewContent: action.value
+    })
+  }else if(action.type === "reviewStarChange"){
+    let newStar = state.reviewStar+1;
+    if(state.reviewStar === 5){
+      newStar = 1;
+    }
+    nextState = Object.assign({}, state, {
+      reviewStar: newStar
     })
   }else if(action.type === "uploadReviewPictureComplete"){
     nextState = Object.assign({}, state, {

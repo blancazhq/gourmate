@@ -1,9 +1,10 @@
 import $ from "jquery";
+import BASEURL from "../baseurl";
 
 export const getSingleUserData = (id)=> {
   return (dispatch)=>{
     $.ajax({
-      url: "http://localhost:3012/api/users/"+id,
+      url: BASEURL+"/api/users/"+id,
       method: "get"
     })
     .then((data)=>{

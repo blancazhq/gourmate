@@ -6,8 +6,8 @@ import {Link, IndexLink} from "react-router";
 class Dashboard extends React.Component {
   render(){
     return (
-      <div>
-        <ul>
+      <div id="dashboard_wrapper">
+        <ul id="dashboard_ul" className="cf">
           <IndexLink to={"/dashboard"}><li>Profile</li></IndexLink>
           <Link to={"/dashboard/message"}><li>Message</li></Link>
           <Link to={"/dashboard/meallist"}><li>Meal List</li></Link>

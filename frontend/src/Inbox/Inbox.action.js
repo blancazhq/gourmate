@@ -1,9 +1,10 @@
 import $ from "jquery";
+import BASEURL from "../baseurl";
 
 export const getInboxData = (id, token)=> {
   return (dispatch)=>{
     $.ajax({
-      url: "http://localhost:3012/api/message/inbox",
+      url: `${BASEURL}/api/message/inbox`,
       method: "get",
       data: {
         id: id,
