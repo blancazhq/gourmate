@@ -5,13 +5,15 @@ import {Link, IndexLink} from "react-router";
 
 const MessageLayout = (props)=>
   <div>
-    <div>
-      <ul>
-        <IndexLink to="/dashboard/message/"><li>Inbox</li></IndexLink>
-        <Link to="/dashboard/message/sent"><li>Sent</li></Link>
+    <div id="message_nav">
+      <ul id="message_nav_ul">
+        <IndexLink className="message_nav_link" to="/dashboard/message/"><li>Inbox</li></IndexLink>
+        <Link to="/dashboard/message/sent" className="message_nav_link"><li>Sent</li></Link>
       </ul>
     </div>
-    {props.children}
+    <div id="message_div">
+      {props.children}
+    </div>
   </div>
 
 

@@ -4,6 +4,8 @@ import * as Redux from "redux";
 import * as ReactRedux from "react-redux";
 import {hashHistory, Router, Route, IndexRoute, Link, IndexLink} from "react-router";
 import ReduxThunk from "redux-thunk";
+import {persistStore, autoRehydrate} from 'redux-persist';
+import CookieStorage from 'redux-persist-cookie-storage'
 import './index.css';
 import reducer from "./reducer";
 import AppLayoutContainer from "./AppLayout/AppLayout";
@@ -29,7 +31,20 @@ import CreateMealContainer from "./CreateMeal/CreateMeal";
 import ManageRequestContainer from "./ManageRequest/ManageRequest";
 import SearchContainer from "./Search/Search";
 
-let store=Redux.createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),Redux.applyMiddleware(ReduxThunk));
+let store=Redux.createStore(reducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+  Redux.compose(
+    Redux.applyMiddleware(ReduxThunk),
+    autoRehydrate()
+  )
+);
+
+persistStore(store, { storage: new CookieStorage({
+    expiration: {
+      'default': 365 * 86400 // Cookies expire after one year
+    }
+  })
+})
 
 
 ReactDOM.render(

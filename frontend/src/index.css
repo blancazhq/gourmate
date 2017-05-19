@@ -380,25 +380,136 @@ body {
 
 /*sign in*/
 
-#signin_content_div {
+#signin_wrapper h4 {
+  position: absolute;
+  font-family: Arial, sans-serif;
+  left: 75.25vw;
+  top: 34.5vw;
+  color: black;
+  font-size: 5vw;
+}
+
+#signin_content_wrapper {
+  float: left;
+  position: relative;
   background-color: black;
   width: 70vw;
   height: 60vh;
   margin-top: 10vh;
+  color:white;
 }
 
+#signin_content_div {
+  position: absolute;
+  left: 34vw;
+  top: 18vw;
+}
 
+#signin_content_div p{
+  position: relative;
+  top: 2vw;
+}
 
-#signin_label_div, #signin_input_div{
+#signin_input_div{
   float: left;
 }
 
-#signin_label_div label{
-  display: block;
-}
 
 #signin_input_div input{
   display: block;
+  border: none;
+  border-bottom: 1px solid white;
+  background-color: transparent;
+  height: 3vw;
+  width: 28vw;
+  color: white;
+}
+
+#signin_content_div button {
+  position: relative;
+  top: 2vw;
+  clear: left;
+  display: block;
+  border-style: solid;
+  border: 1px solid white;
+  width: 9vw;
+  height: 3vw;
+  color:white;
+  background-color: transparent;
+}
+
+#signin_decor{
+  float: left;
+  width:15vw;
+  height: 53vh;
+  margin-top: 10vh;
+  background-image: url(images/spices.jpg);
+  background-size: cover;
+}
+
+/*sign up*/
+
+#signup_wrapper h4 {
+  font-family: Arial, sans-serif;
+  position: absolute;
+  left: 75.25vw;
+  top: 36.5vw;
+  color: black;
+  font-size: 5vw;
+}
+
+#signup_content_wrapper {
+  float: left;
+  background-color: black;
+  width: 65vw;
+  height: 55vh;
+  padding-top: 5vw;
+  padding-left: 5vw;
+  margin-top: 10vh;
+}
+
+#signup_content_wrapper input {
+  display: block;
+  border: none;
+  border-bottom: 1px solid white;
+  background-color: transparent;
+  height: 3vw;
+  width: 28vw;
+  color: white;
+}
+
+#signup_content_div1{
+  float: left;
+}
+
+#signup_content_div2{
+  float: left;
+}
+
+#signup_content_button_div{
+  clear: left;
+  display: block;
+  position: relative;
+  top: 2vw;
+}
+
+#signup_content_button_div button{
+  border-style: solid;
+  border: 1px solid white;
+  width: 12vw;
+  height: 3vw;
+  color:white;
+  margin-right: 2vw;
+  background-color: transparent;
+}
+
+#signup_decor{
+  float: left;
+  width:15vw;
+  height: 58vh;
+  margin-top: 10vh;
+  background-image: url(images/dishes.jpg);
+  background-size: cover;
 }
 
 
@@ -413,13 +524,54 @@ body {
   background-color: black;
 }
 
-#dashboard_wrapper ul li{
+#dashboard_ul li{
   float: left;
   list-style:none;
   color: white;
   padding-right: 4vw;
 }
 
-#dashboard_wrapper ul li:hover{
+#dashboard_ul li:hover{
   color: #FF7004;
+}
+
+/*message layout*/
+
+#message_nav{
+  float:left;
+  width: 20vw;
+}
+
+#message_nav_ul li {
+  list-style: none;
+}
+
+.message_nav_link {
+  color:black;
+  text-decoration: none;
+  line-height: 2.85vw;
+}
+
+#message_div{
+  float: left;
+}
+
+/*inbox*/
+
+.message_title_div h2 {
+  display: inline-block;
+}
+
+.new_message_button {
+  position: relative;
+  top: 1vw;
+  width: 2vw;
+  margin-left: 1vw;
+  vertical-align: top;
+}
+
+.message_content_div {
+  border: 1px solid black;
+  width: 75vw;
+  height: 50vh;
 }

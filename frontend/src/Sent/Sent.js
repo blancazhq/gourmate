@@ -10,17 +10,21 @@ class Sent extends React.Component {
   render(){
     let data = this.props.sent.data;
     return(
-      <div>
-      <h2>Sent</h2>
-      <Link to="/dashboard/message/newmessage"><button>new message</button></Link>
-      {data? data.map((message, idx)=>
-        <div>
-          <p>{message.title}</p>
-          <Link to={"/user/"+message.receiver_id}><p>{message.receiver_name}</p></Link>
-          {message.show_content ?<button onClick={()=>this.props.toggleSentContent(idx)}>hide content</button>:<button onClick={()=>this.props.toggleSentContent(idx)}>show content</button>}
-          {message.show_content ? <p>{message.content}</p> : null}
+      <div className="message_wrapper">
+        <div className="message_title_div">
+          <h2>Sent</h2>
+          <Link to="/dashboard/message/newmessage"><img className="new_message_button" src="images/new_message.png"/></Link>
         </div>
-      ):null}
+        <div className="message_content_div">
+        {data? data.map((message, idx)=>
+          <div className="message_content_unit_div">
+            <p>{message.title}</p>
+            <Link to={"/user/"+message.receiver_id}><p>{message.receiver_name}</p></Link>
+            {message.show_content ?<button onClick={()=>this.props.toggleSentContent(idx)}>hide content</button>:<button onClick={()=>this.props.toggleSentContent(idx)}>show content</button>}
+            {message.show_content ? <p>{message.content}</p> : null}
+          </div>
+        ):null}
+      </div>
       </div>
     )
   }
