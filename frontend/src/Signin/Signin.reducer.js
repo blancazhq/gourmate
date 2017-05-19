@@ -45,7 +45,7 @@ const SigninReducer = (state = initState, action) => {
      token: null
    })
  }else{
-   nextState = Object.assign({}, state)
+   nextState = state;
  }
  return nextState;
 }
