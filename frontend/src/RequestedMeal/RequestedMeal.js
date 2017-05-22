@@ -13,15 +13,13 @@ class RequestedMeal extends React.Component {
       <div>
       <h2>Requested Meal</h2>
       {data? data.map((meal, idx)=>
-        <div>
-          <Link to={"/meal/"+meal.meal_id}><p>{meal.title}</p></Link>
+        <div className="meallist_unit_div">
+          <Link className="meallist_title_link" to={"/meal/"+meal.meal_id}><p className="meallist_title">{meal.title}</p></Link>
           <p>{meal.mealdate.slice(0, meal.mealdate.indexOf("T"))}</p>
           <p>{meal.mealtime}</p>
-          <p>{meal.address}</p>
-          <p>{meal.city}</p>
-          <p>{meal.state}</p>
-          <p>{meal.price}</p>
-          <img src={meal.url} width="150px"/>
+          <p>{meal.address}, {meal.city}, {meal.state}</p>
+          <p>${meal.price}/person</p>
+          <img src={meal.url}/>
         </div>
       ):null}
       </div>

@@ -16,20 +16,23 @@ class WatchedMeal extends React.Component {
       <div>
       <h2>Watched Meal</h2>
       {data? data.map((meal, idx)=>
-        <div>
-          <Link to={"/meal/"+meal.meal_id}><p>{meal.title}</p></Link>
+        <div className="meallist_unit_div">
+          <Link className="meallist_title_link" to={"/meal/"+meal.meal_id}><p className="meallist_title">{meal.title}</p></Link>
+
+          {meal.watched ? <button className="meallist_watch_button" onClick={()=>this.props.unwatchMeal(idx, currentuserid, meal.meal_id, token)}>unwatch</button> : <button className="meallist_watch_button" onClick={()=>this.props.watchMeal(idx, currentuserid, meal.meal_id, token)}>watch</button> }
+
           <p>{meal.mealdate.slice(0, meal.mealdate.indexOf("T"))}</p>
           <p>{meal.mealtime}</p>
-          <p>{meal.address}</p>
-          <p>{meal.city}</p>
-          <p>{meal.state}</p>
-          <p>{meal.price}</p>
-          <img src={meal.url} width="150px"/>
+          <p>{meal.address}, {meal.city}, {meal.state}</p>
+          <p>${meal.price}/person</p>
+          <img src={meal.url}/>
 
-          {meal.watched ? <button onClick={()=>this.props.unwatchMeal(idx, currentuserid, meal.meal_id, token)}>unwatch</button> : <button onClick={()=>this.props.watchMeal(idx, currentuserid, meal.meal_id, token)}>watch</button> }
 
-          <input type="number" onChange={this.props.watchedMealQuantityChange} value={this.props.watchedmeal.quantity}/><label>people are going</label>
-          {!meal.requested ? <button onClick={()=>this.props.requestWatchedMeal(idx, meal.meal_id, currentuserid, quantity, token)}>join this meal</button> : <button disabled>already joined</button>}
+          <div className="meallist_join_number_div">
+            <input type="number" onChange={this.props.watchedMealQuantityChange} value={this.props.watchedmeal.quantity}/><label>people are going</label>
+          </div>
+
+          {!meal.requested ? <button className="meallist_join_button" onClick={()=>this.props.requestWatchedMeal(idx, meal.meal_id, currentuserid, quantity, token)}>join this meal</button> : <button className="meallist_join_button" disabled>already joined</button>}
         </div>
       ):null}
       </div>

@@ -7,9 +7,11 @@ import {Link} from "react-router";
 class Meal extends React.Component {
   componentDidMount(){
     this.props.getSingleMealData(this.props.params.id);
-    if(this.props.signin.signedIn){
-      this.props.getMealStatus(this.props.signin.id, this.props.params.id, this.props.signin.token)
-    }
+    setTimeout(()=>{
+      if(this.props.signin.signedIn){
+        this.props.getMealStatus(this.props.signin.id, this.props.params.id, this.props.signin.token)
+      }
+    }, 500)
   }
   render(){
     let data = this.props.meal.data;
@@ -68,21 +70,21 @@ class Meal extends React.Component {
           </div>
 
           <div id="meal_join_info_div">
-            <div id="meal_join_div">
+            {(status === "not watched" || status === "watched") && currentuserid !== data.hostid ? <div id="meal_join_div">
               <div id="meal_join_content_div">
                 <h4>Interested? Join this meal</h4>
                 <label>guest number: </label><input id="join_meal_number" type="number" onChange={this.props.quantityChange} value={this.props.meal.quantity} max={data.guest ? data.peoplelimit-data.guest.map(guest=>guest.quantity).reduce(((a, b)=>a+b), 0) : data.peoplelimit}/>
                 {this.props.meal.peopleWantToJoin>0 ? <p>your party of {this.props.meal.peopleWantToJoin} is ready to go!</p> :null}
               </div>
               {this.props.signin.signedIn ? <button onClick={()=>  this.props.requestMeal(mealid, currentuserid, quantity, token)}>join this meal</button> : <Link to="/signin"><button>join this meal</button></Link>}
-            </div>
+            </div> : (currentuserid ===data.hostid ? <div id="meal_join_div"><p>You are the host of this meal</p></div> : <div id="meal_join_div"><p>You already {status} this meal.</p></div>)}
 
-            <div id="meal_people_going_div">
+            {data.guest.length>0 ? <div id="meal_people_going_div">
             <p>People who are also going: </p>
             {data.guest.map((guest)=>
               <p><Link to={"/user/"+guest.user_id}>{guest.name}</Link>&#39;s party of {guest.quantity}</p>
             )}
-            </div>
+            </div> : null}
           </div>
 
           <div id="meal_review_div">
@@ -96,7 +98,7 @@ class Meal extends React.Component {
               {review.img.map((url)=><img className="meal_review_img" src={url}/>)}
             </div>
           )}
-          {this.props.signin.signedIn ? <button onClick={this.props.toggleReview}>write a review</button> : <Link to="/signin"><button>write a review</button></Link>}
+          {this.props.signin.signedIn ? <button onClick={this.props.toggleReview} disabled={this.props.meal.reviewed}>{this.props.meal.reviewed ?"You have already reviewed this meal.":"write a review"}</button> : <Link to="/signin"><button>write a review</button></Link>}
 
           {this.props.meal.reviewing ?
             <div id="meal_writereview_div">
@@ -108,11 +110,13 @@ class Meal extends React.Component {
             </div>
             <div id="meal_writereview_botton_div">
               <div id="meal_review_star" className={"star"+this.props.meal.reviewStar} onClick={this.props.reviewStarChange}></div>
+              <div id="meal_writereview_img_div">
+                {imgs ? imgs.map((img)=><img src={img}/>) : null}
+              </div>
               <button onClick={this.props.uploadReviewPicture}>upload pictures</button>
-              <button onClick={()=>this.props.submitReview(reviewtitle, reviewcontent, currentuserid, mealid, imgs, reviewstar, token)}>submit review</button>
+              <button id="meal_submit_review_button" onClick={()=>this.props.submitReview(reviewtitle, reviewcontent, currentuserid, mealid, imgs, reviewstar, token)}>submit review</button>
             </div>
           </div> : null}
-          {this.props.meal.reviewed ? <p>You have already reviewed this meal.</p>: null}
           </div>
         </div>
         : null

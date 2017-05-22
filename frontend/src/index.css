@@ -54,6 +54,13 @@ body {
   font-size: 1vw;
 }
 
+#unread_message_notification{
+  width: 0.8vw !important;
+  height: 0.8vw !important;
+  padding-left: 0 !important;
+  padding-top: 0vw !important;
+}
+
 
 /*search*/
 
@@ -154,6 +161,26 @@ body {
   color: #FF7004;
 }
 
+#search_result_no_result_div {
+  text-align: center;
+  padding-top: 10vh;
+}
+
+#search_result_no_result_div button {
+  display: block;
+  width: 9vw;
+  height: 3vw;
+  border-style: solid;
+  border: 1px solid black;
+  background-color: transparent;
+  margin-top: 5vw;
+  margin-left: 45vw;
+}
+
+#search_result_no_result_link {
+   text-decoration: none;
+   color:black;
+}
 /*meal*/
 
 #meal_main_img_div{
@@ -181,6 +208,11 @@ body {
   margin-bottom: 1vw;
 }
 
+#meal_info_div h4{
+  display: block;
+  margin-top: 0;
+}
+
 #meal_info_div button{
   display: inline-block;
   margin-left: 2vw;
@@ -193,12 +225,11 @@ body {
 
 #meal_course_div{
   clear:left;
-  padding-top: 1vw;
-  padding-bottom: 1vw;
+  padding: 1vw 10vw;
   text-align: center;
   border-top: 1px solid black;
   border-bottom: 1px solid black;
-  width: 96vw;
+  width: 80vw;
   margin-left: 2vw;
   margin-right: 2vw;
 }
@@ -206,10 +237,11 @@ body {
 #meal_other_img_div {
   margin-left: 2vw;
   margin-top: 2vw;
+  margin-bottom: 2vw;
 }
 
 #meal_other_img_div img{
-  height: 20vw;
+  height: 10vw;
 }
 
 #meal_join_info_div {
@@ -220,7 +252,11 @@ body {
   float: left;
   margin-left: 2vw;
   padding-bottom: 2vw;
-  border-bottom: 1px solid black;
+  margin-right: 2vw;
+}
+
+#meal_join_div p{
+  padding-left: 2vw;
 }
 
 #meal_join_content_div {
@@ -251,15 +287,19 @@ body {
 }
 
 #meal_people_going_div {
+  border-top: 1px solid black;
   clear: left;
   margin-left: 4vw;
   padding-top: 1vw;
+  margin-right: 2vw;
 }
 
 #meal_review_div {
   float: left;
   padding-left: 2vw;
   padding-bottom: 2vw;
+  border-left: 1px solid black;
+  margin-bottom: 2vw;
 }
 
 .meal_review_display_star {
@@ -325,6 +365,21 @@ body {
   height: 3vw;
   border: none;
   border-bottom: 1px solid black;
+}
+
+#meal_writereview_img_div{
+  padding-top: 1vw;
+}
+
+#meal_writereview_img_div img{
+  margin-right: 0.5vw;
+  height: 50px;
+}
+
+#meal_submit_review_button {
+  background-color: black !important;
+  color:white !important;
+  border: none !important;
 }
 
 /*user*/
@@ -394,7 +449,7 @@ body {
   position: relative;
   background-color: black;
   width: 70vw;
-  height: 60vh;
+  height: 32vw;
   margin-top: 10vh;
   color:white;
 }
@@ -441,7 +496,7 @@ body {
 #signin_decor{
   float: left;
   width:15vw;
-  height: 53vh;
+  height: 29vw;
   margin-top: 10vh;
   background-image: url(images/spices.jpg);
   background-size: cover;
@@ -462,7 +517,7 @@ body {
   float: left;
   background-color: black;
   width: 65vw;
-  height: 55vh;
+  height: 28vw;
   padding-top: 5vw;
   padding-left: 5vw;
   margin-top: 10vh;
@@ -506,7 +561,7 @@ body {
 #signup_decor{
   float: left;
   width:15vw;
-  height: 58vh;
+  height: 29vw;
   margin-top: 10vh;
   background-image: url(images/dishes.jpg);
   background-size: cover;
@@ -573,5 +628,344 @@ body {
 .message_content_div {
   border: 1px solid black;
   width: 75vw;
-  height: 50vh;
+  height: 56vh;
+  overflow-y: scroll;
+}
+
+.message_content_unit_div {
+  border-bottom: 1px solid black;
+  display: block;
+}
+
+.message_content_unit_div:last-child {
+  border-bottom: none;
+}
+
+.message_content_unit{
+  padding-left: 2vw;
+  float: left;
+}
+
+.message_content_unit_button{
+  float: right;
+}
+
+
+.message_content_unit_title {
+  font-family: Arial, sans-serif;
+  font-size: 1vw;
+}
+
+.message_content_unit_content {
+  font-family: Arial, sans-serif;
+  font-size: 0.8vw;
+}
+
+.message_content_name_unread {
+  font-family: Arial, sans-serif;
+  font-size: 1.3vw;
+  font-weight: bold;
+  text-decoration: none;
+  color: red;
+}
+
+.message_content_name_read {
+  font-family: Arial, sans-serif;
+  font-size: 1.3vw;
+  font-weight: bold;
+  text-decoration: none;
+  color: black;
+}
+
+.message_content_div button {
+  border-style: solid;
+  border: 1px solid black;
+  width: 12vw;
+  height: 3vw;
+  color:black;
+  margin-right: 2vw;
+  background-color: transparent;
+  display: block;
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+}
+
+.reply_button_link {
+  text-decoration: none;
+  color:black;
+}
+
+/*new message */
+
+#new_message_wrapper label{
+  display: block;
+  margin: 2vw 0;
+}
+
+#new_message_wrapper input{
+  display: block;
+  width: 60vw;
+  height: 3vw;
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+#new_message_wrapper textarea{
+  display: block;
+  width: 60vw;
+  height: 10vw;
+  border: 1px solid black;
+}
+
+#new_message_wrapper button{
+  display: block;
+  border-style: solid;
+  border: 1px solid black;
+  width: 12vw;
+  height: 3vw;
+  color:black;
+  margin-right: 2vw;
+  background-color: transparent;
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+}
+
+#new_message_candidate_div{
+  position: absolute;
+  background-color: black;
+  color: white;
+  width: 30vw;
+  padding: 1vw;
+}
+
+.new_message_candidate_unit_div{
+  padding: 1vw;
+  border-bottom: 1px solid white;
+}
+
+#new_message_candidate_div img, #new_message_candidate_div p{
+  float: left;
+}
+
+.new_message_candidate_name{
+  float: left;
+  font-size: 1.2vw;
+  margin: 1vw 0.5vw 1vw 1vw;
+}
+
+.new_message_candidate_title{
+  float: left;
+  font-size: 1vw;
+  margin: 1.2vw 0;
+}
+
+#new_message_candidate_div img{
+  float: left;
+  width: 6vw;
+}
+
+/*meallist layout*/
+
+#meallist_nav{
+  float:left;
+  width: 20vw;
+}
+
+#meallist_nav_ul li {
+  list-style: none;
+}
+
+.meallist_nav_link {
+  color:black;
+  text-decoration: none;
+  line-height: 2.85vw;
+}
+
+#meallist_div{
+  float: left;
+}
+
+/*meallist*/
+
+.meallist_unit_div{
+  border: 1px solid black;
+  width: 20vw;
+  padding: 1vw;
+  float: left;
+  margin-right: 1vw;
+}
+
+.meallist_unit_div img{
+  height: 10vw;
+}
+
+.meallist_join_number_div{
+  display: block;
+}
+
+.meallist_unit_div input{
+  width: 2vw;
+  height: 3vw;
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+.meallist_watch_button {
+  display: inline-block;
+  border-style: solid;
+  border: none;
+  width: 6vw;
+  height: 2vw;
+  color:white;
+  margin-right: 2vw;
+  background-color: black;
+  margin-bottom: 0.5vw;
+}
+
+.meallist_join_button{
+  display: block;
+  border-style: solid;
+  border: 1px solid black;
+  width: 12vw;
+  height: 3vw;
+  color:black;
+  margin-right: 2vw;
+  background-color: transparent;
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+}
+
+.meallist_title_link {
+  text-decoration: none;
+  color: black;
+  font-size: 1.3vw;
+  font-weight: bold;
+}
+
+.meallist_title {
+  margin-top: 0;
+}
+
+.pay_button {
+  display: block;
+  border-style: solid;
+  border: none;
+  width: 12vw;
+  height: 3vw;
+  color:white;
+  background-color: black;
+  margin-top: 1vw;
+  margin-bottom: 0.5vw;
+}
+
+/*host_dashboard*/
+
+#host_dashboard_nav{
+  float:left;
+  width: 20vw;
+}
+
+#host_dashboard_nav_ul li {
+  list-style: none;
+}
+
+.host_dashboard_nav_link {
+  color:black;
+  text-decoration: none;
+  line-height: 2.85vw;
+}
+
+#host_dashboard_div{
+  float: left;
+}
+
+/*create_meal*/
+
+#create_meal_wrapper label{
+  display:block;
+  margin: 1vw 0;
+}
+
+#create_meal_wrapper input{
+  width: 60vw;
+  height: 3vw;
+  border: none;
+  border-bottom: 1px solid black;
+}
+
+#create_meal_address{
+  width: 30vw !important;
+}
+
+#create_meal_city, #create_meal_state{
+  width: 15vw !important;
+}
+
+.create_meal_input {
+  float: left !important;
+  width: 20vw !important;
+}
+
+.create_meal_input_clear {
+  clear: left !important;
+}
+
+#create_meal_wrapper button{
+  display: block;
+  border-style: solid;
+  border: 1px solid black;
+  width: 12vw;
+  height: 3vw;
+  color:black;
+  margin-right: 2vw;
+  background-color: transparent;
+  margin-top: 1vw;
+  margin-bottom: 1vw;
+}
+
+#create_meal_button{
+  background-color: black !important;
+  color:white !important;
+  border: none !important;
+}
+
+/*manage request*/
+.manage_request_unit_div {
+  display:block;
+  border-bottom: 1px solid black;
+  width: 70vw;
+}
+
+.manage_request_title {
+  text-decoration: none;
+  color:black;
+  font-weight: bold;
+}
+
+.manage_request_unit_div img {
+  float: left;
+  height: 5vw;
+  padding: 4vw 1vw;
+}
+
+.manage_request_unit_content{
+  float: left;
+}
+
+.manage_request_unit_button{
+  float: right;
+  margin-top: 2vw;
+}
+
+.manage_request_unit_button button{
+  display:block;
+  border-style: solid;
+  border: 1px solid black;
+  width: 12vw;
+  height: 3vw;
+  color:black;
+  margin-right: 2vw;
+  background-color: transparent;
+  margin-top: 1vw;
+  margin-bottom: 1vw;
 }

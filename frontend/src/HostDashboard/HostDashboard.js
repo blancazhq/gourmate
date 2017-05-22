@@ -5,14 +5,16 @@ import {Link, IndexLink} from "react-router";
 
 const HostDashboard = (props)=>
   <div>
-    <div>
-      <ul>
-        <IndexLink to="/dashboard/hostdashboard"><li>hosted meals</li></IndexLink>
-        <Link to="/dashboard/hostdashboard/createmeal"><li>create a meal</li></Link>
-        <Link to="/dashboard/hostdashboard/managerequest"><li>manage join requests</li></Link>
+    <div id="host_dashboard_nav">
+      <ul id="host_dashboard_nav_ul">
+        <IndexLink className="host_dashboard_nav_link" to="/dashboard/hostdashboard"><li>hosted meals</li></IndexLink>
+        <Link className="host_dashboard_nav_link" to="/dashboard/hostdashboard/createmeal"><li>create a meal</li></Link>
+        <Link className="host_dashboard_nav_link" to="/dashboard/hostdashboard/managerequest"><li>manage join requests</li></Link>
       </ul>
     </div>
-    {props.children}
+    <div id="host_dashboard_div">
+      {props.children}
+    </div>
   </div>
 
 

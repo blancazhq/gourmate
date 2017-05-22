@@ -5,6 +5,8 @@ import {Link} from "react-router";
 
 class NewMessage extends React.Component {
   render(){
+    let replyid = this.props.inbox.replyid;
+    let replyname = this.props.inbox.replyname;
     let nametemp = this.props.newmessage.receivernametemp;
     let candidates = this.props.newmessage.namecandidates;
     let receiverid = this.props.newmessage.receiverid;
@@ -14,18 +16,26 @@ class NewMessage extends React.Component {
     let token = this.props.signin.token;
 
     return(
-      <div>
-        <label>to:</label><input value={nametemp} onChange={(event)=>  this.props.messageNameChange(event, nametemp)}/>
-        {(candidates && nametemp.length>1) ? <div>
-          {candidates.map((candidate)=><div>
-            <p>{candidate.name}</p>
-            <p>{candidate.intro_title}</p>
-            <img src={candidate.imgurl} width="100px" onClick={()=>this.props.selectCandidate(candidate.id, candidate.name)}/>
+      <div id="new_message_wrapper">
+        <label>To:</label>
+
+        <input value={replyid ? replyname:nametemp} onChange={(event)=>  this.props.messageNameChange(event, nametemp)}/>
+
+        {(candidates && nametemp.length>1 && !receiverid) ? <div id="new_message_candidate_div">
+          {candidates.map((candidate)=><div className="new_message_candidate_unit_div cf">
+            <img src={candidate.imgurl} onClick={()=>this.props.selectCandidate(candidate.id, candidate.name)}/>
+            <p className="new_message_candidate_name">{candidate.name}</p>
+            <p className="new_message_candidate_title"> - {candidate.intro_title}</p>
           </div>)}
         </div>:null}
-        <label>title:</label><input value={this.props.newmessage.title}onChange={this.props.messageTitleChange}/>
-        <label>content:</label><textarea rows="4" cols="50" value={this.props.newmessage.content}onChange={this.props.messageContentChange}/>
-        <button onClick={()=>{this.props.sendMessage(title, content, senderid, receiverid, token)}}>send</button>
+
+        <label>Title:</label>
+        <input value={this.props.newmessage.title}onChange={this.props.messageTitleChange}/>
+
+        <label>Content:</label>
+        <textarea rows="4" cols="50" value={this.props.newmessage.content}onChange={this.props.messageContentChange}/>
+
+        <button onClick={()=>{replyid ? this.props.sendMessage(title, content, senderid, replyid, token) : this.props.sendMessage(title, content, senderid, receiverid, token)}}>send</button>
       </div>
     )
   }

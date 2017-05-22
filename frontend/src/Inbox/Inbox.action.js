@@ -12,12 +12,11 @@ export const getInboxData = (id, token)=> {
       }
     })
     .then((data)=>{
-      data.forEach((message)=>{
-        message.show_content = false
-      })
+      var hasUnreadMessage = data.some((message)=>!message.is_read)
       dispatch({
         type: "getInboxData",
-        value: data
+        value: data,
+        hasUnreadMessage: hasUnreadMessage
       })
     })
     .catch((err)=>{
@@ -30,7 +29,37 @@ export const getInboxData = (id, token)=> {
   }
 }
 
-export const toggleContent = (idx)=>({
-  type: "toggleContent",
-  idx:idx
+export const toggleContent = (idx, messageid, token)=>{
+  return (dispatch)=> {
+    $.ajax({
+      url: `${BASEURL}/api/message/read`,
+      method: "post",
+      data: JSON.stringify({
+        messageid: messageid,
+        token: token
+      }),
+      contentType: "application/json"
+    })
+    .then((data)=>{
+      if(data.id === messageid){
+        dispatch({
+          type: "toggleContent",
+          idx:idx
+        })
+      }
+    })
+    .catch((err)=>{
+      let error = err.responseJSON && err.responseJSON.message || "there is an error"
+      dispatch({
+        type: "toggleContentError",
+        value: error
+      })
+    })
+  }
+}
+
+export const reply = (id, name) =>({
+  type: "reply",
+  id: id,
+  name: name
 })

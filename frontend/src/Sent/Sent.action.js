@@ -14,7 +14,6 @@ export const getSentData = (id, token)=> {
     .then((data)=>{
       console.log(data)
       data.forEach((message)=>{
-        console.log(message)
         message.show_content = false
       })
       dispatch({

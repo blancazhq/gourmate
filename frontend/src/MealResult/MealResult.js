@@ -16,7 +16,7 @@ class MealResult extends React.Component {
     let data = this.props.mealresult.data;
     return(
       <div id="search_result_wrapper" className="cf">
-          {data ? data.map((meal, idx)=>
+          {data && data.length!==0 ? data.map((meal, idx)=>
             <div className="search_result_unit" key={idx}>
               <div className="search_result_img_div">
                 <img className="search_result_img" src={meal.mealimg}/>
@@ -33,7 +33,10 @@ class MealResult extends React.Component {
                 <Link className="search_result_link" to={"/meal/"+meal.id}><button>see detail</button></Link>
               </div>
             </div>
-          ): null}
+          ): <div id="search_result_no_result_div">
+            <p>We are sorry, your search does not match any meals that we have.</p>
+            <Link id="search_result_no_result_link" to="/"><button>Try again</button></Link>
+          </div>}
       </div>
     )
   }

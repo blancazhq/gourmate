@@ -116,6 +116,7 @@ export const quantityChange = (event) => ({
 
 export const requestMeal = (mealid, userid, quantity, token)=>{
   return (dispatch)=> {
+    console.log(mealid, quantity, userid, token)
     $.ajax({
       url: `${BASEURL}/api/requestmeal`,
       method: "post",

@@ -1,17 +1,38 @@
 const initState = {
   createdmeal: false,
   error: null,
-  keyword: ["",""],
+  keyword: [null,null,null],
   course: [{
-    name: "",
-    description: "",
-    type: ""
+    name: null,
+    description: null,
+    type: null
   }]
 }
 
 const CreateMealReducer = (state = initState, action) => {
  let nextState;
- if(action.type==="introtitleChange"){
+ if(action.type==="initCreateMeal"){
+   nextState = Object.assign({}, state, {
+     createdmeal: false,
+     introtitle: null,
+     introcontent: null,
+     mealdate: null,
+     mealtime: null,
+     address: null,
+     city: null,
+     state: null,
+     price: null,
+     peoplelimit: null,
+     img: null,
+     error: null,
+     keyword: [null,null,null],
+     course: [{
+       name: null,
+       description: null,
+       type: null
+     }]
+   })
+ }else if(action.type==="introtitleChange"){
    nextState = Object.assign({}, state, {
      introtitle: action.value
    })
@@ -55,7 +76,7 @@ const CreateMealReducer = (state = initState, action) => {
    })
  }else if(action.type==="addKeyword"){
    let keyword_copy = state.keyword.map(keyword=>keyword)
-  keyword_copy.push("");
+  keyword_copy.push(null);
    nextState = Object.assign({}, state, {
      keyword: keyword_copy
    })
@@ -80,9 +101,9 @@ const CreateMealReducer = (state = initState, action) => {
  }else if(action.type==="addCourse"){
    let course_copy = state.course.map(course=>course)
    course_copy.push({
-     name: "",
-     description: "",
-     type: ""
+     name: null,
+     description: null,
+     type: null
    })
    nextState = Object.assign({}, state, {
      course: course_copy
@@ -99,6 +120,38 @@ const CreateMealReducer = (state = initState, action) => {
  }else if(action.type==="doneCreatingMeal"){
    nextState = Object.assign({}, state, {
      createdmeal: true
+   })
+ }else if(action.type==="creatingMealError"){
+   nextState = Object.assign({}, state, {
+     error: action.value
+   })
+ }else if(action.type==="notEnoughKeyWord"){
+   nextState = Object.assign({}, state, {
+     error: "you haven't enter enough keywords, 3 required"
+   })
+ }else if(action.type==="notEnoughCourse"){
+   nextState = Object.assign({}, state, {
+     error: "you haven't enter enough courses, 1 required"
+   })
+ }else if(action.type==="dateInvalid"){
+   nextState = Object.assign({}, state, {
+     error: "date invalid"
+   })
+ }else if(action.type==="timeInvalid"){
+   nextState = Object.assign({}, state, {
+     error: "time invalid"
+   })
+ }else if(action.type==="titleInvalid"){
+   nextState = Object.assign({}, state, {
+     error: "title cannot be empty"
+   })
+ }else if(action.type==="contentInvalid"){
+   nextState = Object.assign({}, state, {
+     error: "content cannot be empty"
+   })
+ }else if(action.type==="toggleCreateMeal"){
+   nextState = Object.assign({}, state, {
+     createdmeal: !state.createdmeal
    })
  }else{
    nextState = Object.assign({}, state)

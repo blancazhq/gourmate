@@ -7,6 +7,9 @@ const bcrypt = require("bcrypt");
 const Promise = require("bluebird");
 const config = require("./config");
 const cloudinary = require("cloudinary")
+var stripe = require("stripe")(
+  "sk_test_hxVLgiPwvBFLgu0BOVWpMY1g"
+);
 const db = pgp(config.dbconfig);
 cloudinary.config(config.cconfig);
 
@@ -26,7 +29,7 @@ app.get("/api/meals", function(req, res, next){
      })
      .catch(next)
   }else{
-    db.any(`select distinct on (meal_keyword.id) meal.id, title,content, mealdate, mealtime, meal.address, meal.city, meal.state, price, peoplelimit, spottaken, url as mealimg, userinfo.id as hostid, name as hostname, imgurl as profileimg, word as keyword from meal left outer join meal_keyword on meal_keyword.meal_id = meal.id left outer join mealimg on meal.id = mealimg.meal_id inner join userinfo on meal.host_id = userinfo.id where meal_keyword.word ilike $1 and meal.city ilike $2 and meal.state ilike $3`,[`%${keyword}%`,`%${city}%`, `%${state}%`])
+    db.any(`select distinct on (meal.id) meal.id, title,content, mealdate, mealtime, meal.address, meal.city, meal.state, price, peoplelimit, spottaken, url as mealimg, userinfo.id as hostid, name as hostname, imgurl as profileimg, word as keyword from meal left outer join meal_keyword on meal_keyword.meal_id = meal.id left outer join mealimg on meal.id = mealimg.meal_id inner join userinfo on meal.host_id = userinfo.id where (meal_keyword.word ilike $1 or meal.title ilike $1 or meal.content ilike $1) and meal.city ilike $2 and meal.state ilike $3`,[`%${keyword}%`,`%${city}%`, `%${state}%`])
      .then(data => {
        res.json(data)
      })
@@ -201,9 +204,18 @@ app.use(function authentication(req, res, next){
 
 app.get("/api/message/inbox", function(req, res, next){
   let receiverid = req.query.id;
-  db.any(`select title, content, sender_id, name as sender_name from message inner join userinfo on message.sender_id = userinfo.id where message.receiver_id = $1`, receiverid)
+  db.any(`select message.id, title, content, sender_id, name as sender_name, is_read from message inner join userinfo on message.sender_id = userinfo.id where message.receiver_id = $1`, receiverid)
     .then((messages) => {
       res.json(messages)
+    })
+    .catch(next)
+})
+
+app.post("/api/message/read", function(req, res, next){
+  let messageid = req.body.messageid;
+  db.one(`update message set is_read = true where id = $1 returning *`, messageid)
+    .then((entry)=>{
+      res.json(entry)
     })
     .catch(next)
 })
@@ -278,23 +290,28 @@ app.post("/api/requestmeal", function(req, res, next){
 
   db.oneOrNone(`select * from meal_user where meal_id = $1 and user_id = $2 and (status = 'watched' or status = 'requested')`, [mealid, userid])
     .then((item) =>{
-      if(item.status === "requested"){
-        db.one(`update meal_user set quantity = quantity + $1 where meal_id = $2 and user_id = $3 returning *`, [quantity, mealid, userid])
-          .then((entry) => {
-            res.json(entry)
-          })
-      }else if(item.status === "watched"){
-        db.one(`update meal_user set quantity = $1, status = 'requested' where meal_id = $2 and user_id = $3 returning *`, [quantity, mealid, userid])
-          .then((entry) => {
-            res.json(entry)
-          })
+      if(item){
+        if(item.status === "requested"){
+          return db.one(`update meal_user set quantity = quantity + $1 where meal_id = $2 and user_id = $3 returning *`, [quantity, mealid, userid])
+            .then((entry) => {
+              res.json(entry)
+            })
+        }else if(item.status === "watched"){
+          return db.one(`update meal_user set quantity = $1, status = 'requested' where meal_id = $2 and user_id = $3 returning *`, [quantity, mealid, userid])
+            .then((entry) => {
+              res.json(entry)
+            })
+        }
       }else{
-        db.one(`insert into meal_user values (default, $1, $2, $3, default, 'requested') returning *`, [userid, mealid, quantity])
+        return db.one(`insert into meal_user values (default, $1, $2, $3, default, 'requested') returning *`, [userid, mealid, quantity])
          .then((entry) => {
            res.json(entry)
          })
-         .catch(next)
       }
+    })
+    .catch(function(err){
+      console.log("err", err)
+      next(err)
     })
 })
 
@@ -338,12 +355,37 @@ app.get("/api/requestedmeal", function(req, res, next){
 
 app.get("/api/approvedmeal", function(req, res, next){
   let id = req.query.id;
-  console.log(id)
   db.any(`select distinct on (meal.id) * from meal_user inner join meal on meal_user.meal_id = meal.id left outer join mealimg on mealimg.meal_id = meal.id where status = 'approved' and user_id = $1`, id)
     .then((meals) => {
       res.json(meals)
     })
     .catch(next)
+})
+
+
+
+
+
+app.post("/api/payment", function(req, res, next){
+  let userid = req.body.userid;
+  let mealid = req.body.mealid;
+  let stripetoken = req.body.stripetoken;
+  let description = req.body.description;
+
+  stripe.charges.create({
+    amount: 2000,
+    currency: "usd",
+    source: stripetoken, // obtained with Stripe.js
+    description: "Charge for "+ description
+  }, function(err, charge) {
+    if(charge){
+      db.one(`update meal_user set status = 'purchased' where meal_id = $1 and user_id = $2 returning *`, [mealid, userid])
+        .then((entry)=>{
+          res.json(entry)
+        })
+        .catch(next)
+    }
+  });
 })
 
 app.get("/api/purchasedmeal", function(req, res, next){
@@ -412,22 +454,28 @@ app.post("/api/createmeal", function(req, res, next){
   db.one(`insert into meal values(default, $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) returning *`, [introtitle, mealdate, mealtime, address, city, state, price, peoplelimit, 0, id, introcontent])
   .then((data) => {
     mealid = data.id;
-    let promises = img.map((img)=>{
-      db.none(`insert into mealimg values(default, $1, $2, default)`,[mealid, img])
-    })
-    return Promise.all(promises)
+    if(img){
+      let promises = img.map((img)=>{
+        db.none(`insert into mealimg values(default, $1, $2, default)`,[mealid, img])
+      })
+      return Promise.all(promises)
+    }
   })
   .then(()=>{
-    let promises = course.map((course, idx)=>{
-      db.none(`insert into meal_course values(default, $1, $2, $3, $4, $5)`,[course.name, course.description, course.type, mealid, (idx+1)])
-    })
-    return Promise.all(promises)
+    if(course){
+      let promises = course.map((course, idx)=>{
+        db.none(`insert into meal_course values(default, $1, $2, $3, $4, $5)`,[course.name, course.description, course.type, mealid, (idx+1)])
+      })
+      return Promise.all(promises)
+    }
   })
   .then(()=>{
-    let promises = keyword.map((keyword)=>{
-      db.none(`insert into meal_keyword values(default, $1, $2)`,[keyword, mealid])
-    })
-    return Promise.all(promises)
+    if(keyword){
+      let promises = keyword.map((keyword)=>{
+        db.none(`insert into meal_keyword values(default, $1, $2)`,[keyword, mealid])
+      })
+      return Promise.all(promises)
+    }
   })
   .then(()=>{
     res.json("done inserting")

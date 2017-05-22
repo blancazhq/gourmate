@@ -9,6 +9,7 @@ class Inbox extends React.Component {
   }
   render(){
     let data = this.props.inbox.data;
+    let token = this.props.signin.token;
     return(
       <div className="message_wrapper">
         <div className="message_title_div">
@@ -17,11 +18,16 @@ class Inbox extends React.Component {
         </div>
         <div className="message_content_div">
           {data? data.map((message, idx)=>
-            <div className="message_content_unit_div">
-              <p>{message.title}</p>
-              <Link to={"/user/"+message.sender_id}><p>{message.sender_name}</p></Link>
-              {message.show_content ?<button onClick={()=>this.props.toggleContent(idx)}>hide content</button>:<button onClick={()=>this.props.toggleContent(idx)}>show content</button>}
-              {message.show_content ? <p>{message.content}</p> : null}
+            <div className="message_content_unit_div cf">
+              <div className="message_content_unit">
+                <Link className={message.is_read ? "message_content_name_read":"message_content_name_unread"} to={"/user/"+message.sender_id}><p>{message.sender_name}</p></Link>
+                <p className="message_content_unit_title">{message.title}</p>
+                {message.show_content ? <p className="message_content_unit_content">{message.content}</p> : null}
+              </div>
+              <div className="message_content_unit_button">
+                {message.show_content ?<button onClick={()=>this.props.toggleContent(idx, message.id, token)}>hide content</button>:<button onClick={()=>this.props.toggleContent(idx, message.id, token)}>show content</button>}
+                <Link className="reply_button_link" to="/dashboard/message/newmessage"><button onClick={()=>this.props.reply(message.sender_id, message.sender_name)}>reply</button></Link>
+              </div>
             </div>
           ):null}
         </div>

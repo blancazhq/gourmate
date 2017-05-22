@@ -17,11 +17,15 @@ class Sent extends React.Component {
         </div>
         <div className="message_content_div">
         {data? data.map((message, idx)=>
-          <div className="message_content_unit_div">
-            <p>{message.title}</p>
-            <Link to={"/user/"+message.receiver_id}><p>{message.receiver_name}</p></Link>
-            {message.show_content ?<button onClick={()=>this.props.toggleSentContent(idx)}>hide content</button>:<button onClick={()=>this.props.toggleSentContent(idx)}>show content</button>}
-            {message.show_content ? <p>{message.content}</p> : null}
+          <div className="message_content_unit_div cf">
+            <div className="message_content_unit">
+              <Link className="message_content_name_read" to={"/user/"+message.receiver_id}><p>{message.receiver_name}</p></Link>
+              <p>{message.title}</p>
+              {message.show_content ? <p className="message_content_unit_content">{message.content}</p> : null}
+            </div>
+            <div className="message_content_unit_button">
+              {message.show_content ?<button onClick={()=>this.props.toggleSentContent(idx)}>hide content</button>:<button onClick={()=>this.props.toggleSentContent(idx)}>show content</button>}
+            </div>
           </div>
         ):null}
       </div>

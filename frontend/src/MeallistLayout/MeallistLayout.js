@@ -5,15 +5,17 @@ import {Link, IndexLink} from "react-router";
 
 const MeallistLayout = (props)=>
   <div>
-    <div>
-      <ul>
-        <IndexLink to="/dashboard/meallist"><li>Requested Meals</li></IndexLink>
-        <Link to="/dashboard/meallist/watchedmeal"><li>Watched Meals</li></Link>
-        <Link to="/dashboard/meallist/approvedmeal"><li>Approved Meals</li></Link>
-        <Link to="/dashboard/meallist/purchasedmeal"><li>Purchased Meals</li></Link>
+    <div id="meallist_nav">
+      <ul id="meallist_nav_ul">
+        <IndexLink className="meallist_nav_link" to="/dashboard/meallist"><li>Requested Meals</li></IndexLink>
+        <Link className="meallist_nav_link" to="/dashboard/meallist/watchedmeal"><li>Watched Meals</li></Link>
+        <Link className="meallist_nav_link" to="/dashboard/meallist/approvedmeal"><li>Approved Meals</li></Link>
+        <Link className="meallist_nav_link" to="/dashboard/meallist/purchasedmeal"><li>Purchased Meals</li></Link>
       </ul>
     </div>
-    {props.children}
+    <div id="meallist_div">
+      {props.children}
+    </div>
   </div>
 
 
