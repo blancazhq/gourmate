@@ -133,14 +133,6 @@ const CreateMealReducer = (state = initState, action) => {
    nextState = Object.assign({}, state, {
      error: "you haven't enter enough courses, 1 required"
    })
- }else if(action.type==="dateInvalid"){
-   nextState = Object.assign({}, state, {
-     error: "date invalid"
-   })
- }else if(action.type==="timeInvalid"){
-   nextState = Object.assign({}, state, {
-     error: "time invalid"
-   })
  }else if(action.type==="titleInvalid"){
    nextState = Object.assign({}, state, {
      error: "title cannot be empty"
@@ -149,9 +141,37 @@ const CreateMealReducer = (state = initState, action) => {
    nextState = Object.assign({}, state, {
      error: "content cannot be empty"
    })
+ }else if(action.type==="dateInvalid"){
+   nextState = Object.assign({}, state, {
+     error: "date invalid"
+   })
+ }else if(action.type==="timeInvalid"){
+   nextState = Object.assign({}, state, {
+     error: "time invalid"
+   })
+ }else if(action.type==="addressInvalid"){
+   nextState = Object.assign({}, state, {
+     error: "address cannot be empty"
+   })
+ }else if(action.type==="cityInvalid"){
+   nextState = Object.assign({}, state, {
+     error: "city cannot be empty"
+   })
+ }else if(action.type==="stateInvalid"){
+   nextState = Object.assign({}, state, {
+     error: "state invalid"
+   })
  }else if(action.type==="toggleCreateMeal"){
    nextState = Object.assign({}, state, {
      createdmeal: !state.createdmeal
+   })
+ }else if(action.type==="notEnoughKeyWord"){
+   nextState = Object.assign({}, state, {
+     error: "you haven't enter enough keywords, 3 required"
+   })
+ }else if(action.type==="notEnoughCourse"){
+   nextState = Object.assign({}, state, {
+     error: "you haven't enter enough courses, 1 required"
    })
  }else{
    nextState = Object.assign({}, state)

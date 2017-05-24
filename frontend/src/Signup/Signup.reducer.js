@@ -1,6 +1,11 @@
 const initState = {
   signingUp: false,
   signedUp: false,
+  usernameIsValid: false,
+  passwordIsValid: false,
+  phonenumberIsValid: false,
+  emailIsValid: false,
+  stateIsValid: false,
   error: null
 }
 
@@ -8,11 +13,17 @@ const SignupReducer = (state = initState, action) => {
  let nextState;
  if(action.type==="usernameChange"){
    nextState = Object.assign({}, state, {
-     username: action.value
+     username: action.value,
+     usernameIsValid: action.validator
+   })
+ }else if(action.type==="usernameValidationError"){
+   nextState = Object.assign({}, state, {
+     error: action.value
    })
  }else if(action.type==="passwordChange"){
    nextState = Object.assign({}, state, {
-     password: action.value
+     password: action.value,
+     passwordIsValid: action.validator
    })
  }else if(action.type==="nameChange"){
    nextState = Object.assign({}, state, {
@@ -28,15 +39,18 @@ const SignupReducer = (state = initState, action) => {
    })
  }else if(action.type==="stateChange"){
    nextState = Object.assign({}, state, {
-     state: action.value
+     state: action.value,
+     stateIsValid: action.validator
    })
  }else if(action.type==="phonenumberChange"){
    nextState = Object.assign({}, state, {
-     phonenumber: action.value
+     phonenumber: action.value,
+     phonenumberIsValid: action.validator
    })
  }else if(action.type==="emailChange"){
    nextState = Object.assign({}, state, {
-     email: action.value
+     email: action.value,
+     emailIsValid: action.validator
    })
  }else if(action.type==="introtitleChange"){
    nextState = Object.assign({}, state, {

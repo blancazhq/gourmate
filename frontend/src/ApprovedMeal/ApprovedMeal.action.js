@@ -30,7 +30,7 @@ export const getApprovedMealData = (id, token)=> {
   }
 }
 
-export const checkout = (idx, mealid, title, price, userid, auth_token) => {
+export const checkout = (idx, mealid, title, price, quantity, userid, auth_token) => {
   return (dispatch) => {
     var handler = window.StripeCheckout.configure({
   // publishable key
@@ -48,12 +48,13 @@ export const checkout = (idx, mealid, title, price, userid, auth_token) => {
           description: title,
           userid: userid,
           mealid: mealid,
+          quantity: quantity,
           token: auth_token
         }),
         contentType: "application/json"
       })
       .then((data)=>{
-        if(data.meal_id === mealid){
+        if(data.id === mealid){
           dispatch({
             type: "completePayment",
             idx: idx
@@ -73,7 +74,7 @@ export const checkout = (idx, mealid, title, price, userid, auth_token) => {
     handler.open({
       name: 'Gourmate',
       description: title,
-      amount: price * 100
+      amount: price * 100 * quantity
     });
   }
 }

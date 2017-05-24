@@ -18,6 +18,7 @@ class User extends React.Component {
             <img src={data.imgurl}/>
             <div id="user_info_content_div">
               <h2>{data.name}</h2>
+              <div className={"display_star star"+Math.round(data.star)}></div>
               <h3>{data.intro_title}</h3>
               <p>{data.intro_content}</p>
               <p>food preference: {data.food_preference}</p>

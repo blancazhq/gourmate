@@ -9,7 +9,10 @@ class ManageRequest extends React.Component {
   }
   render(){
     let data = this.props.managerequest.data;
-    let token = this.props.signin.token
+    let token = this.props.signin.token;
+    let hostid = this.props.signin.id;
+    let hostname = this.props.signin.name;
+
     return(
       <div>
       <h2>Manage Requests</h2>
@@ -26,8 +29,8 @@ class ManageRequest extends React.Component {
           </div>
           <div className="manage_request_unit_button">
             {request.approved === "not approved" ?<div>
-            <button onClick={()=>this.props.acceptRequest(idx, request.meal_id, request.user_id, token)}>accept</button>
-            <button onClick={()=>this.props.declineRequest(idx, request.meal_id, request.user_id, token)}>decline</button>
+            <button onClick={()=>this.props.acceptRequest(idx, request.meal_id, request.user_id,hostid,hostname,request.title, token)}>accept</button>
+            <button onClick={()=>this.props.declineRequest(idx, request.meal_id, request.user_id,hostid,hostname,request.title, token)}>decline</button>
             </div>:(request.approved === "approved" ? <p>You already approved this request</p>: <p>You already declined this request</p>)}
           </div>
         </div>

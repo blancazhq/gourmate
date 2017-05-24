@@ -29,7 +29,7 @@ class WatchedMeal extends React.Component {
 
 
           <div className="meallist_join_number_div">
-            <input type="number" onChange={this.props.watchedMealQuantityChange} value={this.props.watchedmeal.quantity}/><label>people are going</label>
+            <input type="number" onChange={this.props.watchedMealQuantityChange} value={this.props.watchedmeal.quantity} max={meal.peoplelimit-meal.spottaken} min="0"/><label>people are going</label>
           </div>
 
           {!meal.requested ? <button className="meallist_join_button" onClick={()=>this.props.requestWatchedMeal(idx, meal.meal_id, currentuserid, quantity, token)}>join this meal</button> : <button className="meallist_join_button" disabled>already joined</button>}

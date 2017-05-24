@@ -30,16 +30,18 @@ export const getManageRequestData = (id, token)=> {
   }
 }
 
-export const acceptRequest = (idx, mealid, userid, token)=>{
+export const acceptRequest = (idx, mealid, userid, hostid, hostname, mealtitle, token)=>{
   return (dispatch)=> {
-    console.log(idx, mealid, userid, token)
     $.ajax({
       url: `${BASEURL}/api/acceptrequest`,
       method: "post",
       data: JSON.stringify({
         mealid: mealid,
         userid: userid,
-        token: token
+        token: token,
+        hostid: hostid,
+        hostname: hostname,
+        mealtitle: mealtitle
       }),
       contentType: "application/json"
     })
@@ -52,7 +54,6 @@ export const acceptRequest = (idx, mealid, userid, token)=>{
       }
     })
     .catch((err)=>{
-      console.log(err)
       let error = err.responseJSON && err.responseJSON.message || "there is an error"
       dispatch({
         type: "acceptRequestError",
@@ -62,7 +63,7 @@ export const acceptRequest = (idx, mealid, userid, token)=>{
   }
 }
 
-export const declineRequest = (idx, mealid, userid, token)=>{
+export const declineRequest = (idx, mealid, userid, hostid, hostname, mealtitle, token)=>{
   return (dispatch)=> {
     $.ajax({
       url: `${BASEURL}/api/declinerequest`,
@@ -70,7 +71,10 @@ export const declineRequest = (idx, mealid, userid, token)=>{
       data: JSON.stringify({
         mealid: mealid,
         userid: userid,
-        token: token
+        token: token,
+        hostid: hostid,
+        hostname: hostname,
+        mealtitle: mealtitle
       }),
       contentType: "application/json"
     })

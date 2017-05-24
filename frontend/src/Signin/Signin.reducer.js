@@ -28,11 +28,12 @@ const SigninReducer = (state = initState, action) => {
    })
  }else if(action.type==="doneSigningIn"){
    nextState = Object.assign({}, state, {
-     message: "welcome " + state.username + "!",
+     message: "welcome " + action.value.name + "!",
      signedIn: true,
      token: action.value.token,
      id: action.value.id,
-     ishost: action.value.is_host
+     ishost: action.value.is_host,
+     name: action.value.name
    })
  }else if(action.type==="signOut"){
    nextState = Object.assign({}, state, {

@@ -4,18 +4,116 @@ const cloudinary = window.cloudinary;
 import BASEURL from "../baseurl";
 
 export function usernameChange(event){
-  return {
-    type: "usernameChange",
-    value: event.target.value
+  return function(dispatch){
+    let username = event.target.value
+    $.ajax({
+      url: BASEURL+"/api/usernamevalidate",
+      method: "get",
+      data: {
+        username: event.target.value
+      }
+    })
+    .then((data)=>{
+      let isValid = false;
+      if(data==="username is occupied" || !username){
+        isValid = false;
+      }else{
+        isValid = true;
+      }
+      dispatch({
+        type: "usernameChange",
+        value: username,
+        validator: isValid
+      })
+    })
+    .catch((err)=>{
+      let error = err.responseJSON && err.responseJSON.message || "there is an error"
+      dispatch({
+        type: "usernameValidationError",
+        value: error
+      })
+    })
   }
 }
 
 export function passwordChange(event){
-  return {
-    type: "passwordChange",
-    value: event.target.value
+  return function(dispatch){
+    let password = event.target.value;
+    let regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/
+    let isValid = !!password.match(regex);
+      dispatch({
+        type: "passwordChange",
+        value: password,
+        validator: isValid
+      })
   }
 }
+
+export function phonenumberChange(event){
+  return function(dispatch){
+    let phonenumber = event.target.value;
+
+    function telephoneCheck(str) {
+      var re = /(1)?( )?(\()?\d{3}(\))?( )?(-)?\d{3}( )?(-)?\d{4}/g
+      var found = str.match(re);
+      function parenthesesTest(str){
+        var result = true;
+        for(var i=0;i<str.length;i++){
+          var slice1 = str.slice(i, i+1);
+          var slice2 = str.slice(i+4, i+5);
+          if(slice1 === "(" && slice2 !== ")"){
+            result = false;
+          }else if(slice1 === ")" && i===3){
+            result = false;
+          }else if(slice2 === ")" && slice1 !== "("){
+            result = false;
+          }
+        }
+        return result;
+      }
+      if(found!==null && found[0] === str && parenthesesTest(str)===true){
+        return true;
+      }else{
+        return false;
+      }
+    }
+
+    let isValid = telephoneCheck(phonenumber);
+
+      dispatch({
+        type: "phonenumberChange",
+        value: phonenumber,
+        validator: isValid
+      })
+  }
+}
+
+export function emailChange(event){
+  return function(dispatch){
+    let email = event.target.value;
+    let regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    let isValid = !!email.match(regex);
+      dispatch({
+        type: "emailChange",
+        value: email,
+        validator: isValid
+      })
+  }
+}
+
+export function stateChange(event){
+  return function(dispatch){
+    let state = event.target.value;
+    let regex = /^(?:(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|P[AR]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY]))$/
+    let isValid = !!state.match(regex);
+      dispatch({
+        type: "stateChange",
+        value: state,
+        validator: isValid
+      })
+  }
+}
+
 
 export function nameChange(event){
   return {
@@ -35,24 +133,7 @@ export function cityChange(event){
     value: event.target.value
   }
 }
-export function stateChange(event){
-  return {
-    type: "stateChange",
-    value: event.target.value
-  }
-}
-export function phonenumberChange(event){
-  return {
-    type: "phonenumberChange",
-    value: event.target.value
-  }
-}
-export function emailChange(event){
-  return {
-    type: "emailChange",
-    value: event.target.value
-  }
-}
+
 export function introtitleChange(event){
   return {
     type: "introtitleChange",

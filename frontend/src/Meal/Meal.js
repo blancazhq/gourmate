@@ -36,6 +36,7 @@ class Meal extends React.Component {
           </div>
           <div id="meal_info_div">
             <h2>{data.title}</h2>
+            <div className={"display_star star"+Math.round(data.star)}></div>
             { status==="not watched" && currentuserid !==data.hostid ? <button onClick={()=>this.props.watchSingleMeal(currentuserid, mealid, token)}>watch</button> : (status === "watched" ? <button onClick={()=>this.props.unwatchSingleMeal(currentuserid, mealid, token)}>unwatch</button> : null)}
             <h4>keywords: {data.keyword.map((keyword)=>
               <span>{keyword.word} </span>
@@ -44,7 +45,7 @@ class Meal extends React.Component {
             <p>{data.address}, {data.city}, {data.state}</p>
             <p>${data.price}/person</p>
             <p>this meal can have at most {data.peoplelimit} people</p>
-            <p>{data.guest ? data.peoplelimit-data.guest.map(guest=>guest.quantity).reduce(((a, b)=>a+b), 0) : data.peoplelimit} spots remaining</p>
+            <p>{data.peoplelimit - data.spottaken} spots remaining</p>
             <p>this meal is hosted by {data.hostname}</p>
             <Link to={"/user/"+data.hostid}><img src={data.profileimg} height="50px"/></Link>
           </div>
@@ -62,6 +63,10 @@ class Meal extends React.Component {
 
 
           <div id="meal_other_img_div">
+          <iframe id="meal_map"
+            frameBorder="0"
+            src={"https://www.google.com/maps/embed/v1/place?key=AIzaSyADo0FoAzwOrVfPZ7SxRt9sK9nv6ZqcguY&q="+data.address+","+data.city+"+"+data.state} allowFullScreen>
+          </iframe>
           {data.mealimg.map((url, idx)=> {
             if(idx!==0){
               return <img src={url}/>
@@ -73,11 +78,11 @@ class Meal extends React.Component {
             {(status === "not watched" || status === "watched") && currentuserid !== data.hostid ? <div id="meal_join_div">
               <div id="meal_join_content_div">
                 <h4>Interested? Join this meal</h4>
-                <label>guest number: </label><input id="join_meal_number" type="number" onChange={this.props.quantityChange} value={this.props.meal.quantity} max={data.guest ? data.peoplelimit-data.guest.map(guest=>guest.quantity).reduce(((a, b)=>a+b), 0) : data.peoplelimit}/>
+                <label>guest number: </label><input id="join_meal_number" type="number" onChange={this.props.quantityChange} value={this.props.meal.quantity} max={data.peoplelimit - data.spottaken} min="0"/>
                 {this.props.meal.peopleWantToJoin>0 ? <p>your party of {this.props.meal.peopleWantToJoin} is ready to go!</p> :null}
               </div>
               {this.props.signin.signedIn ? <button onClick={()=>  this.props.requestMeal(mealid, currentuserid, quantity, token)}>join this meal</button> : <Link to="/signin"><button>join this meal</button></Link>}
-            </div> : (currentuserid ===data.hostid ? <div id="meal_join_div"><p>You are the host of this meal</p></div> : <div id="meal_join_div"><p>You already {status} this meal.</p></div>)}
+            </div> : (currentuserid ===data.hostid ? <div id="meal_join_div"><p>You are the host of this meal</p></div> : <div id="meal_join_div"><p>{status === "requested" || status === "purchased" ? "You already "+status+" this meal." : "You are already "+status+" for this meal." }</p></div>)}
 
             {data.guest.length>0 ? <div id="meal_people_going_div">
             <p>People who are also going: </p>
@@ -92,7 +97,7 @@ class Meal extends React.Component {
           {data.review.map((review)=>
             <div>
               <h4>{review.title}</h4>
-              <div className={"meal_review_display_star star"+review.star}></div>
+              <div className={"display_star star"+review.star}></div>
               <Link to={"/user/"+review.reviewerid}><p>{review.reviewername}</p></Link>
               <p>{review.content}</p>
               {review.img.map((url)=><img className="meal_review_img" src={url}/>)}

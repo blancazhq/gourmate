@@ -17,6 +17,24 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
+app.get("/api/featuredmeals", function(req, res, next){
+  let collection = {};
+  db.one(`select * from meal left outer join mealimg on meal.id = mealimg.meal_id inner join userinfo on meal.host_id = userinfo.id where meal.star is not null order by meal.star desc limit 1`)
+    .then(data => {
+      collection.starmeal = data;
+      return db.one(`select * from meal left outer join mealimg on meal.id = mealimg.meal_id inner join userinfo on meal.host_id = userinfo.id where meal.id != $1 order by spottaken desc limit 1`, data.meal_id)
+    })
+    .then(data => {
+      collection.mostpopular = data;
+      return db.one(`select * from meal left outer join mealimg on meal.id = mealimg.meal_id inner join userinfo on meal.host_id = userinfo.id where meal.id !=$1 and meal.id!=$2 order by meal.price limit 1`, [data.meal_id, collection.starmeal.meal_id])
+    })
+    .then(data => {
+      collection.cheapest = data;
+      res.json(collection)
+    })
+    .catch(next)
+})
+
 app.get("/api/meals", function(req, res, next){
   let keyword = req.query.keyword;
   let city = req.query.city;
@@ -39,7 +57,7 @@ app.get("/api/meals", function(req, res, next){
 
 app.get("/api/meals/:id", function(req, res, next){
   let id = req.params.id;
-  db.one(`select meal.id, title, mealdate, mealtime, meal.address, meal.city, meal.state, price, peoplelimit, spottaken, userinfo.id as hostid, name as hostname, imgurl as profileimg from meal inner join userinfo on meal.host_id = userinfo.id where meal.id = $1 `, id)
+  db.one(`select meal.id, title, mealdate, mealtime, meal.address, meal.city, meal.state, price, peoplelimit, spottaken, meal.star, userinfo.id as hostid, name as hostname, imgurl as profileimg from meal inner join userinfo on meal.host_id = userinfo.id where meal.id = $1 `, id)
    .then(data => {
      db.any(`select url from mealimg where meal_id = $1 and review_id isnull`, id)
       .then((urls) => {
@@ -47,7 +65,7 @@ app.get("/api/meals/:id", function(req, res, next){
         urls.forEach((url)=>{
           data.mealimg.push(url.url)
         })
-        return db.any(`select review_meal.id as reviewid, title, content,star, userinfo.id as reviewerid, userinfo.name as reviewername from review_meal inner join userinfo on review_meal.reviewer_id = userinfo.id where meal_id = $1`, id)
+        return db.any(`select review_meal.id as reviewid, title, content,review_meal.star, userinfo.id as reviewerid, userinfo.name as reviewername from review_meal inner join userinfo on review_meal.reviewer_id = userinfo.id where meal_id = $1`, id)
       })
       .then((reviews) => {
         let promises = [];
@@ -121,6 +139,19 @@ app.get("/api/finduser", function(req, res, next){
   db.any(`select * from userinfo where name ilike $1 `, `%${name}%`)
    .then(data => {
       res.json(data)
+   })
+   .catch(next)
+})
+
+app.get("/api/usernamevalidate", function(req, res, next){
+  let username = req.query.username;
+  db.oneOrNone(`select * from userinfo where username = $1 `, username)
+   .then(data => {
+      if(data){
+        res.json("username is occupied");
+      }else{
+        res.json("username is good");
+      }
    })
    .catch(next)
 })
@@ -204,7 +235,7 @@ app.use(function authentication(req, res, next){
 
 app.get("/api/message/inbox", function(req, res, next){
   let receiverid = req.query.id;
-  db.any(`select message.id, title, content, sender_id, name as sender_name, is_read from message inner join userinfo on message.sender_id = userinfo.id where message.receiver_id = $1`, receiverid)
+  db.any(`select message.id, message.title as messagetitle, message.content as messagecontent, sender_id, name as sender_name, is_read, related_meal_id, meal.title as mealtitle from message inner join userinfo on message.sender_id = userinfo.id left outer join meal on meal.id = message.related_meal_id where message.receiver_id = $1`, receiverid)
     .then((messages) => {
       res.json(messages)
     })
@@ -261,7 +292,15 @@ app.post("/api/review", function(req, res, next){
       }
     })
     .then(()=>{
-        res.json("done inserting review")
+      return db.one(`update meal set star = (select avg(star) from review_meal where meal_id = $1) where id = $1 returning *`, mealid)
+    })
+    .then((entry)=>{
+      console.log("1")
+      return db.one(`update userinfo set star = (select avg(star) from meal where host_id = $1) where id = $1 returning *`, entry.host_id)
+    })
+    .then((entry)=>{
+      console.log(entry)
+      res.json("done inserting review")
     })
     .catch(next)
 })
@@ -363,12 +402,10 @@ app.get("/api/approvedmeal", function(req, res, next){
 })
 
 
-
-
-
 app.post("/api/payment", function(req, res, next){
   let userid = req.body.userid;
   let mealid = req.body.mealid;
+  let quantity = req.body.quantity;
   let stripetoken = req.body.stripetoken;
   let description = req.body.description;
 
@@ -380,6 +417,9 @@ app.post("/api/payment", function(req, res, next){
   }, function(err, charge) {
     if(charge){
       db.one(`update meal_user set status = 'purchased' where meal_id = $1 and user_id = $2 returning *`, [mealid, userid])
+        .then((entry)=>{
+          return db.one(`update meal set spottaken = spottaken + $1 where id = $2 returning *`, [quantity, mealid])
+        })
         .then((entry)=>{
           res.json(entry)
         })
@@ -397,24 +437,6 @@ app.get("/api/purchasedmeal", function(req, res, next){
     .catch(next)
 })
 
-app.post("/api/shoppingcart/checkout", function(req, res, next){
-  let meals = req.body.meals;
-  let token = req.body.token;
-  let userid;
-  db.one(`select * from auth_token where token = $1`, token)
-  .then((entry)=>{
-    userid = entry.user_id;
-    let promises = meals.map((meal)=>{db.none(`insert into purchase values (default, $1, $2, $3)`, [userid, meal.meal_id, meal.quantity])})
-    return Promise.all(promises)
-  })
-  .then(()=>{
-    return db.any(`delete from shoppingcart`)
-  })
-  .then(()=>{
-    res.json("done checking out")
-  })
-  .catch(next)
-})
 
 app.post("/api/becomeahost", function(req, res, next){
   let userid = req.body.userid;
@@ -495,11 +517,20 @@ app.get("/api/managerequest", function(req, res, next){
 app.post("/api/acceptrequest", function(req, res, next){
   let userid = req.body.userid;
   let mealid = req.body.mealid;
-  console.log(userid, mealid)
+  let hostid = req.body.hostid;
+  let hostname = req.body.hostname;
+  let mealtitle = req.body.mealtitle;
+  let requestentry;
+  let messagetitle = hostname+" has approved your request";
+  let messagecontent = hostname+" has approved your request for ";
 
   db.one(`update meal_user set status = 'approved' where user_id = $1 and meal_id = $2 and status = 'requested' returning *`, [userid, mealid])
   .then((request) => {
-    res.json(request)
+    requestentry = request;
+    return db.one(`insert into message values(default, $1, $2, $3, $4, false, $5) returning *`, [messagetitle, messagecontent, hostid, userid, mealid])
+  })
+  .then((message)=>{
+    res.json(requestentry)
   })
   .catch(next)
 })
@@ -507,10 +538,20 @@ app.post("/api/acceptrequest", function(req, res, next){
 app.post("/api/declinerequest", function(req, res, next){
   let userid = req.body.userid;
   let mealid = req.body.mealid;
+  let hostid = req.body.hostid;
+  let hostname = req.body.hostname;
+  let mealtitle = req.body.mealtitle;
+  let requestentry;
+  let messagetitle = hostname+" has declined your request";
+  let messagecontent = hostname+" has declined your request for ";
 
   db.one(`update meal_user set status = 'declined' where user_id = $1 and meal_id = $2 and status = 'requested' returning *`, [userid, mealid])
   .then((request) => {
-    res.json(request)
+    requestentry = request;
+    return db.one(`insert into message values(default, $1, $2, $3, $4, false, $5) returning *`, [messagetitle, messagecontent, hostid, userid, mealid])
+  })
+  .then((message)=>{
+    res.json(requestentry)
   })
   .catch(next)
 })

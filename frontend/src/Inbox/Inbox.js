@@ -21,8 +21,8 @@ class Inbox extends React.Component {
             <div className="message_content_unit_div cf">
               <div className="message_content_unit">
                 <Link className={message.is_read ? "message_content_name_read":"message_content_name_unread"} to={"/user/"+message.sender_id}><p>{message.sender_name}</p></Link>
-                <p className="message_content_unit_title">{message.title}</p>
-                {message.show_content ? <p className="message_content_unit_content">{message.content}</p> : null}
+                <p className="message_content_unit_title">{message.messagetitle}</p>
+                {message.show_content ? <p className="message_content_unit_content">{message.messagecontent}{message.related_meal_id ? <Link to={"/meal/"+message.related_meal_id}>{message.mealtitle}</Link> : null}</p> : null}
               </div>
               <div className="message_content_unit_button">
                 {message.show_content ?<button onClick={()=>this.props.toggleContent(idx, message.id, token)}>hide content</button>:<button onClick={()=>this.props.toggleContent(idx, message.id, token)}>show content</button>}

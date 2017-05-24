@@ -5,11 +5,18 @@ import {Link, IndexLink} from "react-router";
 
 class AppLayout extends React.Component {
   componentDidMount(){
+    this.counter = 0;
     setTimeout(()=>{
       if(this.props.signin.id){
         this.props.getInboxData(this.props.signin.id, this.props.signin.token);
       }
     }, 500)
+  }
+  componentWillReceiveProps(newProps){
+    if(newProps.signin.id!==null && newProps.signin.id !== this.props.signin.id){
+      this.props.getInboxData(newProps.signin.id, newProps.signin.token);
+    }
+    this.counter++
   }
 
   render(){

@@ -22,9 +22,10 @@ class ApprovedMeal extends React.Component {
           <p>{meal.mealtime}</p>
           <p>{meal.address}, {meal.city}, {meal.state}</p>
           <p>${meal.price}/person</p>
+          <p>party of {meal.quantity}</p>
           <img src={meal.url}/>
 
-          {meal.is_paid ? <p>this meal has been paid for.</p>:<button className="pay_button" onClick={()=>this.props.checkout(idx, meal.meal_id, meal.title, meal.price, userid, token)}>make a payment</button>}
+          {meal.is_paid ? <p>this meal has been paid for.</p>:<button className="pay_button" onClick={()=>this.props.checkout(idx, meal.meal_id, meal.title, meal.price, meal.quantity, userid, token)}>make a payment</button>}
 
         </div>
       ):null}

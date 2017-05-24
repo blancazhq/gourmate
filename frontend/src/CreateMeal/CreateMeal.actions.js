@@ -137,12 +137,16 @@ export function mealimguploadChange(event){
 export function createMeal(data){
   return function(dispatch){
     let validator = (data)=>{
-      let titlevalidator = (data.introtitle!==undefined);
-      let contentvalidator = (data.introcontent!==undefined);
+      let titlevalidator = !!data.introtitle;
+      let contentvalidator = !!data.introcontent;
       let datevalidator = data.mealdate ?
       (data.mealdate.match(/^\d{4}\-(0?[1-9]|1[012])\-(0?[1-9]|[12][0-9]|3[01])$/)!==null) : false;
       let timevalidator = data.mealtime ?
       (data.mealtime.match(/^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/)!==null) : false;
+      let addressvalidator = !!data.address;
+      let cityvalidator = !!data.city;
+      let statevalidator = data.state ?
+      (data.state.match(/^(?:(A[KLRZ]|C[AOT]|D[CE]|FL|GA|HI|I[ADLN]|K[SY]|LA|M[ADEINOST]|N[CDEHJMVY]|O[HKR]|P[AR]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY]))$/)) : false;
       let keywordvalidator = data.keyword.every((keyword)=>keyword !== null)
       let coursevalidator =
       data.course.every((course)=>course.name !==null)
@@ -152,6 +156,9 @@ export function createMeal(data){
         contentvalidator:contentvalidator,
         datevalidator:datevalidator,
         timevalidator:timevalidator,
+        addressvalidator:addressvalidator,
+        cityvalidator:cityvalidator,
+        statevalidator:statevalidator,
         keywordvalidator:keywordvalidator,
         coursevalidator:coursevalidator
       }
@@ -172,6 +179,18 @@ export function createMeal(data){
     }else if(!validator(data).timevalidator){
       dispatch({
         type: "timeInvalid"
+      })
+    }else if(!validator(data).addressvalidator){
+      dispatch({
+        type: "addressInvalid"
+      })
+    }else if(!validator(data).cityvalidator){
+      dispatch({
+        type: "cityInvalid"
+      })
+    }else if(!validator(data).statevalidator){
+      dispatch({
+        type: "stateInvalid"
       })
     }else if(!validator(data).keywordvalidator){
       dispatch({
