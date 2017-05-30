@@ -10,18 +10,18 @@ class RequestedMeal extends React.Component {
   render(){
     let data = this.props.requestedmeal.data;
     return(
-      <div>
+      <div className="meallist_wrapper">
       <h2>Requested Meal</h2>
-      {data? data.map((meal, idx)=>
+      {data && data.length>0? data.map((meal, idx)=>
         <div className="meallist_unit_div">
-          <Link className="meallist_title_link" to={"/meal/"+meal.meal_id}><p className="meallist_title">{meal.title}</p></Link>
+          <Link className="meallist_title_link" to={"/meal/"+meal.meal_id}><h4 className="meallist_title">{meal.title}</h4></Link>
           <p>{meal.mealdate.slice(0, meal.mealdate.indexOf("T"))}</p>
           <p>{meal.mealtime}</p>
           <p>{meal.address}, {meal.city}, {meal.state}</p>
           <p>${meal.price}/person</p>
           <img src={meal.url}/>
         </div>
-      ):null}
+      ):<p>I don&#39;t have any requested meal.</p>}
       </div>
     )
   }

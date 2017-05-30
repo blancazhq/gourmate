@@ -25,7 +25,7 @@ class User extends React.Component {
             </div>
           </div>
           <div id="user_hosted_meal_div" className="cf">
-          <p>I have hosted:</p>
+          <h5 id="user_hosted_meal_title">I have hosted:</h5>
           {data.meal.map((meal, idx)=>
             <div className="user_hosted_meal_unit_div" key={idx}>
               <img src={meal.url}/>

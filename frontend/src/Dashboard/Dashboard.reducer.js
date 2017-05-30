@@ -1,17 +1,22 @@
 let initState = {
-  data: null,
-  error: null
+  showMessageMenu:false,
+  showMeallistMenu:false,
+  showHostMenu:false,
 };
 
 const DashboardReducer = (state=initState, action)=>{
   let nextState;
-  if(action.type === "getSingleUserData"){
+  if(action.type === "toggleMessageMenu"){
     nextState = Object.assign({}, state, {
-      data: action.value
+      showMessageMenu: !state.showMessageMenu
     })
-  }else if(action.type === "getSingleUserDataError"){
+  }else if(action.type === "toggleMeallistMenu"){
     nextState = Object.assign({}, state, {
-      error: action.value
+      showMeallistMenu: !state.showMeallistMenu
+    })
+  }else if(action.type === "toggleHostMenu"){
+    nextState = Object.assign({}, state, {
+      showHostMenu: !state.showHostMenu
     })
   }else{
     nextState = Object.assign({}, state)

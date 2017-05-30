@@ -13,9 +13,9 @@ class WatchedMeal extends React.Component {
     let quantity = this.props.watchedmeal.quantity;
     let token = this.props.signin.token;
     return(
-      <div>
+      <div className="meallist_wrapper">
       <h2>Watched Meal</h2>
-      {data? data.map((meal, idx)=>
+      {data && data.length>0? data.map((meal, idx)=>
         <div className="meallist_unit_div">
           <Link className="meallist_title_link" to={"/meal/"+meal.meal_id}><p className="meallist_title">{meal.title}</p></Link>
 
@@ -34,7 +34,7 @@ class WatchedMeal extends React.Component {
 
           {!meal.requested ? <button className="meallist_join_button" onClick={()=>this.props.requestWatchedMeal(idx, meal.meal_id, currentuserid, quantity, token)}>join this meal</button> : <button className="meallist_join_button" disabled>already joined</button>}
         </div>
-      ):null}
+      ):<p>I haven&#39;t watch any meals.</p>}
       </div>
     )
   }

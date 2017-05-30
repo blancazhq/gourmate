@@ -20,7 +20,7 @@ class Signin extends React.Component{
                 <input type="password" value={this.props.signin.password}
                 onChange={this.props.signinPasswordChange} placeholder="password"/>
               </div>
-              <button onClick={()=>this.props.signIn(this.props.signin.username, this.props.signin.password)}>SignIn</button>
+              <button onClick={()=>this.props.signIn(this.props.signin.username, this.props.signin.password)}>Sign in</button>
               <p>{this.props.signin.message}</p>
               <p>{this.props.signin.error}</p>
             </div>

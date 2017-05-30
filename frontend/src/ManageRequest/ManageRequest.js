@@ -14,14 +14,14 @@ class ManageRequest extends React.Component {
     let hostname = this.props.signin.name;
 
     return(
-      <div>
+      <div id="manage_request_wrapper">
       <h2>Manage Requests</h2>
 
       {data? data.map((request, idx)=>
         <div className="manage_request_unit_div cf">
           <Link to={"/user/"+request.user_id}><img src={request.imgurl} alt={request.name}/></Link>
           <div className="manage_request_unit_content">
-            <Link className="manage_request_title" to={"/meal/"+request.meal_id}><h3>{request.title}</h3></Link>
+            <Link className="manage_request_title_link" to={"/meal/"+request.meal_id}><h4 className="manage_request_title">{request.title}</h4></Link>
             <p>{request.mealdate.slice(0, request.mealdate.indexOf("T"))}</p>
             <p>{request.mealtime}</p>
             <p>name: {request.name}</p>
@@ -29,8 +29,8 @@ class ManageRequest extends React.Component {
           </div>
           <div className="manage_request_unit_button">
             {request.approved === "not approved" ?<div>
-            <button onClick={()=>this.props.acceptRequest(idx, request.meal_id, request.user_id,hostid,hostname,request.title, token)}>accept</button>
-            <button onClick={()=>this.props.declineRequest(idx, request.meal_id, request.user_id,hostid,hostname,request.title, token)}>decline</button>
+            <button className="manage_request_unit_button_accept" onClick={()=>this.props.acceptRequest(idx, request.meal_id, request.user_id,hostid,hostname,request.title, token)}>accept</button>
+            <button className="manage_request_unit_button_decline" onClick={()=>this.props.declineRequest(idx, request.meal_id, request.user_id,hostid,hostname,request.title, token)}>decline</button>
             </div>:(request.approved === "approved" ? <p>You already approved this request</p>: <p>You already declined this request</p>)}
           </div>
         </div>

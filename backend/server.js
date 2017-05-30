@@ -6,7 +6,8 @@ const uuid = require("uuid");
 const bcrypt = require("bcrypt");
 const Promise = require("bluebird");
 const config = require("./config");
-const cloudinary = require("cloudinary")
+const cloudinary = require("cloudinary");
+
 var stripe = require("stripe")(
   "sk_test_hxVLgiPwvBFLgu0BOVWpMY1g"
 );
@@ -16,6 +17,56 @@ cloudinary.config(config.cconfig);
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
+
+const http = require("http").Server(app);
+const io = require("socket.io")(http);
+
+var people= [];
+
+function Person (name, id){
+  this.name = name;
+  this.id = id;
+}
+
+io.on('connection', function(socket){
+  socket.on("join", function(screenName){
+    socket.screenName = screenName;
+    var person = new Person(screenName, socket.id);
+    people.push(person);
+    io.emit("join", [socket.screenName, people])
+  });
+
+  socket.on("typing", function(msg){
+    io.emit('typing', msg);
+  })
+
+  socket.on('chat message', function(array){
+    var msg = array[0];
+    var to = array[1];
+    var introduction = socket.screenName+" to "+to+"(private): "
+    if(to==="all"){
+      io.emit('chat message', socket.screenName+": "+msg);
+    }else{
+      var id
+      for(var i=0;i<people.length;i++){
+        if(people[i].name===to){
+          id = people[i].id;
+        }
+      }
+      io.sockets.connected[socket.id].emit('chat message', introduction+msg)
+      io.sockets.connected[id].emit('chat message', introduction+msg)
+    }
+  });
+
+  socket.on('disconnect', function(){
+    socket.broadcast.emit("leave", socket.screenName)
+    for(var i=0;i<people.length;i++){
+      if(people[i].id===socket.id){
+        people.splice(i, 1);
+      }
+    }
+  });
+});
 
 app.get("/api/featuredmeals", function(req, res, next){
   let collection = {};
@@ -253,7 +304,7 @@ app.post("/api/message/read", function(req, res, next){
 
 app.get("/api/message/sent", function(req, res, next){
   let senderid = req.query.id;
-  db.any(`select title, content, receiver_id, name as receiver_name from message inner join userinfo on message.receiver_id = userinfo.id where message.sender_id = $1`, senderid)
+  db.any(`select message.id, message.title as messagetitle, message.content as messagecontent, receiver_id, name as receiver_name,  related_meal_id, meal.title as mealtitle from message inner join userinfo on message.receiver_id = userinfo.id left outer join meal on meal.id = message.related_meal_id where message.sender_id = $1`, senderid)
     .then((messages) => {
       res.json(messages)
     })

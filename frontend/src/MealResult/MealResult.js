@@ -17,7 +17,7 @@ class MealResult extends React.Component {
     return(
       <div id="search_result_wrapper" className="cf">
           {data && data.length!==0 ? data.map((meal, idx)=>
-            <div className="search_result_unit" key={idx}>
+            <div className="search_result_unit cf" key={idx}>
               <div className="search_result_img_div">
                 <img className="search_result_img" src={meal.mealimg}/>
               </div>
@@ -27,7 +27,7 @@ class MealResult extends React.Component {
                 <p>{meal.mealdate.slice(0, meal.mealdate.indexOf("T"))}</p>
                 <p>{meal.mealtime}</p>
                 <p>this meal is hosted by {meal.hostname}</p>
-                <Link to={"/user/"+meal.hostid}><img src={meal.profileimg} height="40px"/></Link>
+                <Link to={"/user/"+meal.hostid}><img src={meal.profileimg}/></Link>
               </div>
               <div className="search_result_button_div">
                 <Link className="search_result_link" to={"/meal/"+meal.id}><button>see detail</button></Link>

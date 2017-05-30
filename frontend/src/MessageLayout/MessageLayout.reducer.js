@@ -1,7 +1,7 @@
-let initState = {test: null};
+let initState = {};
 
 const MessageLayoutReducer = (state=initState, action)=>{
-  return state;
+  return state
 }
 
 export default MessageLayoutReducer;

@@ -13,9 +13,9 @@ class ApprovedMeal extends React.Component {
     let token = this.props.signin.token;
 
     return(
-      <div>
+      <div className="meallist_wrapper">
       <h2>Approved Meal</h2>
-      {data? data.map((meal, idx)=>
+      {data && data.length>0? data.map((meal, idx)=>
         <div className="meallist_unit_div">
           <Link className="meallist_title_link" to={"/meal/"+meal.meal_id}><p className="meallist_title">{meal.title}</p></Link>
           <p>{meal.mealdate.slice(0, meal.mealdate.indexOf("T"))}</p>
@@ -28,7 +28,7 @@ class ApprovedMeal extends React.Component {
           {meal.is_paid ? <p>this meal has been paid for.</p>:<button className="pay_button" onClick={()=>this.props.checkout(idx, meal.meal_id, meal.title, meal.price, meal.quantity, userid, token)}>make a payment</button>}
 
         </div>
-      ):null}
+      ):<p>I don&#39;t have any approved meal.</p>}
       </div>
     )
   }

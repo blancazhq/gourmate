@@ -8,7 +8,7 @@ class BecomeAHost extends React.Component{
     let token = this.props.signin.token;
 
     return (
-        <div>
+        <div id="become_a_host_wrapper">
         {this.props.becomeahost.ishost ? <p>{this.props.becomeahost.message}</p> : <button onClick={()=>this.props.becomeAHost(userid, token)}>become a host</button>}
         </div>
     )

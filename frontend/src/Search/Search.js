@@ -16,6 +16,8 @@ class Search extends React.Component{
     return (
       <div>
         <div id="search_div">
+          <h1>Gourmate</h1>
+          <h4>When you share, food tastes better.</h4>
           <div id="search_area">
           <input value={this.props.search.keyword} onChange={this.props.searchKeywordChange} placeholder="type in keyword (breakfast, Mexican...)"/>
           <input value={this.props.search.city} onChange={this.props.searchcityChange} placeholder="city"/>
@@ -53,7 +55,7 @@ class Search extends React.Component{
                     <p>{data.starmeal.mealdate.slice(0, data.starmeal.mealdate.indexOf("T"))}</p>
                     <p>{data.starmeal.mealtime}</p>
                     <p>this meal is hosted by {data.starmeal.name}</p>
-                    <Link className="search_detail_link" to={"/meal/"+data.starmeal.meal_id}><button>see detail</button></Link>
+                    <Link className="search_detail_link"  to={"/meal/"+data.starmeal.meal_id}><button>see detail</button></Link>
                   </div> : null}
                 </TransitionGroup>
               </div>
@@ -88,7 +90,7 @@ class Search extends React.Component{
                   <p>{data.mostpopular.mealtime}</p>
                   <p>{data.mostpopular.spottaken} people are going</p>
                   <p>this meal is hosted by {data.mostpopular.name}</p>
-                  <Link className="search_detail_link" to={"/meal/"+data.starmeal.meal_id}><button>see detail</button></Link>
+                  <Link className="search_detail_link"  to={"/meal/"+data.starmeal.meal_id}><button>see detail</button></Link>
                 </div> :null}
                 </TransitionGroup>
 
@@ -112,8 +114,8 @@ class Search extends React.Component{
                   transitionName="content3"
                   transitionEnterTimeout={500}
                   >
-                {this.props.search.div3Entered ?<div>
-                  <h4>look for a valuable<br/> and delicious meal? </h4>
+                {this.props.search.div3Entered ?<div id="cheapest_content_div">
+                  <h4>LOOKING FOR A VALUABLE<br/> AND DELICIOUS MEAL? </h4>
                   <h2>{data.cheapest.title}</h2>
                   <div className="separation_line"></div>
                   <div id="cheapest_star" className={"display_star star"+Math.round(data.cheapest.star)}></div>

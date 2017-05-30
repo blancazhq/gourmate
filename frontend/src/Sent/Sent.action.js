@@ -12,7 +12,6 @@ export const getSentData = (id, token)=> {
       }
     })
     .then((data)=>{
-      console.log(data)
       data.forEach((message)=>{
         message.show_content = false
       })

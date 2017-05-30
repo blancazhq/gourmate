@@ -119,7 +119,25 @@ const CreateMealReducer = (state = initState, action) => {
    })
  }else if(action.type==="doneCreatingMeal"){
    nextState = Object.assign({}, state, {
-     createdmeal: true
+     createdmeal: true,
+     error: null,
+     introtitle: null,
+     introcontent: null,
+     mealdate: null,
+     mealtime: null,
+     address: null,
+     city: null,
+     state: null,
+     price: null,
+     peoplelimit: null,
+     img: null,
+     error: null,
+     keyword: [null,null,null],
+     course: [{
+       name: null,
+       description: null,
+       type: null
+     }]
    })
  }else if(action.type==="creatingMealError"){
    nextState = Object.assign({}, state, {

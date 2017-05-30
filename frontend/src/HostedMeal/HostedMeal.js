@@ -10,7 +10,7 @@ class HostedMeal extends React.Component {
   render(){
     let data = this.props.hostedmeal.data;
     return(
-      <div>
+      <div className="meallist_wrapper">
       <h2>Hosted Meal</h2>
       {data? data.map((meal, idx)=>
         <div className="meallist_unit_div">

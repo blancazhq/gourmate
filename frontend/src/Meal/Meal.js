@@ -36,9 +36,9 @@ class Meal extends React.Component {
           </div>
           <div id="meal_info_div">
             <h2>{data.title}</h2>
-            <div className={"display_star star"+Math.round(data.star)}></div>
+            <div id="meal_star_display" className={"display_star star"+Math.round(data.star)}></div>
             { status==="not watched" && currentuserid !==data.hostid ? <button onClick={()=>this.props.watchSingleMeal(currentuserid, mealid, token)}>watch</button> : (status === "watched" ? <button onClick={()=>this.props.unwatchSingleMeal(currentuserid, mealid, token)}>unwatch</button> : null)}
-            <h4>keywords: {data.keyword.map((keyword)=>
+            <h4>KEYWORDS: {data.keyword.map((keyword)=>
               <span>{keyword.word} </span>
             )}</h4>
             <p>{data.mealdate.slice(0, data.mealdate.indexOf("T"))} {data.mealtime}</p>
@@ -46,15 +46,15 @@ class Meal extends React.Component {
             <p>${data.price}/person</p>
             <p>this meal can have at most {data.peoplelimit} people</p>
             <p>{data.peoplelimit - data.spottaken} spots remaining</p>
+            <Link to={"/user/"+data.hostid}><img src={data.profileimg} /></Link>
             <p>this meal is hosted by {data.hostname}</p>
-            <Link to={"/user/"+data.hostid}><img src={data.profileimg} height="50px"/></Link>
           </div>
 
           <div id="meal_course_div">
-          <h4>menu: </h4>
+          <h2>Menu </h2>
           {data.course.map((course, idx)=>
             <div>
-              <p>{idx+1}: {course.name}</p>
+              <h4>{idx+1}: {course.name}</h4>
               <p>{course.type}</p>
               <p>{course.description}</p>
             </div>
@@ -93,7 +93,7 @@ class Meal extends React.Component {
           </div>
 
           <div id="meal_review_div">
-          <h3>reviews</h3>
+          <h2>reviews</h2>
           {data.review.map((review)=>
             <div>
               <h4>{review.title}</h4>

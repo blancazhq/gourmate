@@ -10,9 +10,9 @@ class PurchasedMeal extends React.Component {
   render(){
     let data = this.props.purchasedmeal.data;
     return(
-      <div>
+      <div className="meallist_wrapper">
       <h2>Purchased Meal</h2>
-      {data? data.map((meal, idx)=>
+      {data && data.length>0 ? data.map((meal, idx)=>
         <div className="meallist_unit_div">
           <Link className="meallist_title_link" to={"/meal/"+meal.meal_id}><p className="meallist_title">{meal.title}</p></Link>
           <p>{meal.mealdate.slice(0, meal.mealdate.indexOf("T"))}</p>
@@ -21,7 +21,7 @@ class PurchasedMeal extends React.Component {
           <p>${meal.price}/person</p>
           <img src={meal.url}/>
         </div>
-      ):null}
+      ):<p>I don&#39;t have any purchased meal.</p>}
       </div>
     )
   }

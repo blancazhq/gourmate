@@ -25,8 +25,8 @@ class Inbox extends React.Component {
                 {message.show_content ? <p className="message_content_unit_content">{message.messagecontent}{message.related_meal_id ? <Link to={"/meal/"+message.related_meal_id}>{message.mealtitle}</Link> : null}</p> : null}
               </div>
               <div className="message_content_unit_button">
-                {message.show_content ?<button onClick={()=>this.props.toggleContent(idx, message.id, token)}>hide content</button>:<button onClick={()=>this.props.toggleContent(idx, message.id, token)}>show content</button>}
-                <Link className="reply_button_link" to="/dashboard/message/newmessage"><button onClick={()=>this.props.reply(message.sender_id, message.sender_name)}>reply</button></Link>
+                {message.show_content ?<button className="message_show_content_button" onClick={()=>this.props.toggleContent(idx, message.id, token)}>hide content</button>:<button className="message_show_content_button" onClick={()=>this.props.toggleContent(idx, message.id, token)}>show content</button>}
+                <Link className="reply_button_link" to="/dashboard/message/newmessage"><button className="reply_button" onClick={()=>this.props.reply(message.sender_id, message.sender_name)}>reply</button></Link>
               </div>
             </div>
           ):null}
