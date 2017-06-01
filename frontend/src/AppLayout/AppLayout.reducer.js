@@ -49,7 +49,8 @@ const AppLayoutReducer = (state=initState, action)=>{
     })
   }else if(action.type==="socketSend"){
     nextState = Object.assign({}, state, {
-      chatinput: null
+      chatinput: "",
+      chatto: "all"
     })
   }else if(action.type==="clearChat"){
     nextState = Object.assign({}, state, {

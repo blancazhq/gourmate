@@ -64,7 +64,7 @@ class AppLayout extends React.Component {
               <option value="all">all</option>
               {props.applayout.people ? props.applayout.people.map((person)=><option value={person.name}>{person.name}</option>) : null}
             </select>
-            <input type="text" value={props.applayout.chatinput} onChange={props.chatinputChange}/>
+            <input type="text" value={props.applayout.chatinput} onChange={props.chatinputChange} autocomplete="off"/>
             <button onClick={()=>props.socketSend(props.applayout.chatinput,props.applayout.chatto)}>send</button>
           </div>
         </div>:null}
