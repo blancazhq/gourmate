@@ -1,10 +1,14 @@
 import $ from "jquery";
 import { hashHistory } from "react-router";
 import BASEURL from "../baseurl";
+import socket from "../socket"
 
-export function signOut(){
-  return {
-    type: "signOut"
+export function signOut(name){
+  return function(dispatch){
+    socket.emit("sign out", name)
+    dispatch({
+      type: "signOut"
+    })
   }
 }
 
@@ -43,6 +47,7 @@ export function signIn (username, password) {
           type: "wrongUsername"
         })
       }else if(data.username){
+        socket.emit("change name", data.name)
         dispatch({
           type: "doneSigningIn",
           value: data

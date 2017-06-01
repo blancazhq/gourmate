@@ -103,7 +103,7 @@ class Meal extends React.Component {
               {review.img.map((url)=><img className="meal_review_img" src={url}/>)}
             </div>
           )}
-          {this.props.signin.signedIn ? <button onClick={this.props.toggleReview} disabled={this.props.meal.reviewed}>{this.props.meal.reviewed ?"You have already reviewed this meal.":"write a review"}</button> : <Link to="/signin"><button>write a review</button></Link>}
+          {this.props.signin.signedIn ? <button onClick={this.props.toggleReview} disabled={this.props.meal.reviewed}>{this.props.meal.reviewed ?"already reviewed":"write a review"}</button> : <Link to="/signin"><button>write a review</button></Link>}
 
           {this.props.meal.reviewing ?
             <div id="meal_writereview_div">

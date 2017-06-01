@@ -63,3 +63,7 @@ export const reply = (id, name) =>({
   id: id,
   name: name
 })
+
+export const clearReply = ()=>({
+  type: "clearReply"
+})

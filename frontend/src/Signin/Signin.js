@@ -1,11 +1,13 @@
 import React from "react";
 import * as ReactRedux from "react-redux";
-import * as actions from "./Signin.actions"
+import * as actions1 from "./Signin.actions"
+import * as actions2 from "../AppLayout/AppLayout.action";
 
 class Signin extends React.Component{
   componentDidMount(nextProps){
     if(this.props.signin.signedIn){
-      this.props.signOut()
+      this.props.signOut(this.props.signin.name);
+      this.props.clearChat();
     }
   }
   render(){
@@ -20,7 +22,7 @@ class Signin extends React.Component{
                 <input type="password" value={this.props.signin.password}
                 onChange={this.props.signinPasswordChange} placeholder="password"/>
               </div>
-              <button onClick={()=>this.props.signIn(this.props.signin.username, this.props.signin.password)}>Sign in</button>
+              <button onClick={()=>{this.props.signIn(this.props.signin.username, this.props.signin.password);this.props.clearChat()}}>Sign in</button>
               <p>{this.props.signin.message}</p>
               <p>{this.props.signin.error}</p>
             </div>
@@ -32,6 +34,6 @@ class Signin extends React.Component{
   }
 }
 
-const SigninContainer = ReactRedux.connect(state=>state, actions)(Signin)
+const SigninContainer = ReactRedux.connect(state=>state, Object.assign({},actions1,actions2))(Signin)
 
 export default SigninContainer

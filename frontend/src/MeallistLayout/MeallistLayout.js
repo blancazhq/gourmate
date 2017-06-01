@@ -5,7 +5,7 @@ import {Link, IndexLink} from "react-router";
 
 const MeallistLayout = (props)=>
   <div>
-    {props.dashboard.showMeallistMenu || this.props.applayout.width>500 ? <div className="dashboard_nav">
+    {props.dashboard.showMeallistMenu || props.applayout.width>500 ? <div className="dashboard_nav">
       <ul className="dashboard_nav_ul">
         <IndexLink className="dashboard_nav_link" to="/dashboard/meallist"><li onClick={props.toggleMeallistMenu} className="dashboard_nav_li">Requested Meals</li></IndexLink>
         <Link className="dashboard_nav_link" to="/dashboard/meallist/watchedmeal"><li onClick={props.toggleMeallistMenu} className="dashboard_nav_li">Watched Meals</li></Link>

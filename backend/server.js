@@ -30,6 +30,7 @@ function Person (name, id){
 
 io.on('connection', function(socket){
   socket.on("join", function(screenName){
+    console.log(screenName, "join", socket.id)
     socket.screenName = screenName;
     var person = new Person(screenName, socket.id);
     people.push(person);
@@ -38,6 +39,22 @@ io.on('connection', function(socket){
 
   socket.on("typing", function(msg){
     io.emit('typing', msg);
+  })
+
+  socket.on("change name", function(name){
+    socket.screenName = name;
+    var person = new Person(name, socket.id);
+    people.push(person);
+    io.emit("join", [name, people])
+  })
+
+  socket.on("sign out", function(name){
+    for(var i=0;i<people.length;i++){
+      if(people[i].id===socket.id){
+        people.splice(i, 1);
+      }
+    }
+    socket.broadcast.emit("leave", [name, people]);
   })
 
   socket.on('chat message', function(array){
@@ -53,18 +70,20 @@ io.on('connection', function(socket){
           id = people[i].id;
         }
       }
-      io.sockets.connected[socket.id].emit('chat message', introduction+msg)
-      io.sockets.connected[id].emit('chat message', introduction+msg)
+      socket.emit('chat message', introduction+msg)
+      if (id in io.sockets.connected) {
+        io.sockets.connected[id].emit('chat message', introduction+msg);
+      }
     }
   });
 
   socket.on('disconnect', function(){
-    socket.broadcast.emit("leave", socket.screenName)
     for(var i=0;i<people.length;i++){
       if(people[i].id===socket.id){
         people.splice(i, 1);
       }
     }
+    socket.broadcast.emit("leave", [socket.screenName, people]);
   });
 });
 
@@ -607,6 +626,6 @@ app.post("/api/declinerequest", function(req, res, next){
   .catch(next)
 })
 
-app.listen(3012, function(){
+http.listen(3012, function(){
   console.log("listening on port 3012...")
 })

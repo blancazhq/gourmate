@@ -5,7 +5,7 @@ import {Link, IndexLink} from "react-router";
 
 const HostDashboard = (props)=>
   <div>
-    {props.dashboard.showHostMenu|| this.props.applayout.width>500 ?<div className="dashboard_nav">
+    {props.dashboard.showHostMenu|| props.applayout.width>500 ?<div className="dashboard_nav">
       <ul className="dashboard_nav_ul">
         <IndexLink className="dashboard_nav_link" to="/dashboard/hostdashboard"><li onClick={props.toggleHostMenu} className="dashboard_nav_li">hosted meals</li></IndexLink>
         <Link className="dashboard_nav_link" to="/dashboard/hostdashboard/createmeal"><li onClick={props.toggleHostMenu} className="dashboard_nav_li">create a meal</li></Link>

@@ -90,7 +90,7 @@ class Search extends React.Component{
                   <p>{data.mostpopular.mealtime}</p>
                   <p>{data.mostpopular.spottaken} people are going</p>
                   <p>this meal is hosted by {data.mostpopular.name}</p>
-                  <Link className="search_detail_link"  to={"/meal/"+data.starmeal.meal_id}><button>see detail</button></Link>
+                  <Link className="search_detail_link"  to={"/meal/"+data.mostpopular.meal_id}><button>see detail</button></Link>
                 </div> :null}
                 </TransitionGroup>
 
@@ -123,7 +123,7 @@ class Search extends React.Component{
                   <p>{data.cheapest.mealdate.slice(0, data.cheapest.mealdate.indexOf("T"))}</p>
                   <p>{data.cheapest.mealtime}</p>
                   <p>this meal is hosted by {data.cheapest.name}</p>
-                  <Link className="search_detail_link" to={"/meal/"+data.starmeal.meal_id}><button>see detail</button></Link>
+                  <Link className="search_detail_link" to={"/meal/"+data.mostpopular.meal_id}><button>see detail</button></Link>
                 </div>:null}
                </TransitionGroup>
               </div>

@@ -31,6 +31,11 @@ const InboxReducer = (state=initState, action)=>{
       replyid: action.id,
       replyname: action.name
     })
+  }else if(action.type === "clearReply"){
+    nextState = Object.assign({}, state, {
+      replyid: null,
+      replyname: null
+    })
   }else{
     nextState = Object.assign({}, state)
   }
