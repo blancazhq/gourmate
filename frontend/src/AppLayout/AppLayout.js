@@ -53,7 +53,7 @@ class AppLayout extends React.Component {
           </ul>
         </div>
         {props.applayout.showChat && props.signin.id ? <div id="chat_div">
-          <p id="online">online: <span>{this.props.signin.name}</span>{this.props.applayout.people? this.props.applayout.people.map((person)=><span> {person.name}</span>) : null}</p>
+          <p id="online">online: {this.props.applayout.people? this.props.applayout.people.map((person)=><span> {person.name}</span>) : null}</p>
           <div id="chat_display_div" ref={div=>this.chatdiv=div}>
             <ul>
               {props.applayout.chatmessage ? props.applayout.chatmessage.map(message=><li>{message}</li>) : null}
