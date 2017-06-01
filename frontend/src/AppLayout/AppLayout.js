@@ -59,7 +59,6 @@ class AppLayout extends React.Component {
             </ul>
           </div>
           <div id="chat_input_div">
-            <p>to: </p>
             <select value={props.chatto} onChange={props.chattoChange} id="to">
               <option value="all">all</option>
               {props.applayout.people ? props.applayout.people.map((person)=><option value={person.name}>{person.name}</option>) : null}

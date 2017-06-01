@@ -210,17 +210,6 @@ body {
   font-size: 1vw;
 }
 
-#chat_input_div p{
-  display: inline-block;
-  border-top: 1px solid #E1A503;
-  border-bottom: 1px solid #E1A503;
-  font-size: 1vw;
-  padding: 0.6vw;
-  width: 3.4vw;
-  background-color: white;
-  margin-bottom: 1vw;
-  float: left;
-}
 
 #to{
   -webkit-appearance: none;
@@ -228,7 +217,7 @@ body {
   appearance:none;
   border-radius: 0;
   padding: 0.57vw;
-  width: 15vw;
+  width: 20vw;
   border-top: 1px solid #E1A503;
   border-bottom: 1px solid #E1A503;
   border-left: none;
@@ -239,15 +228,14 @@ body {
   background-size: 6% 50%;
   background-color: white;
   font-size: 1vw;
-  float: left;
-  position: relative;
-  top:1vw;
+  margin-bottom: 0.5vw;
 }
 
 #chat_input_div input{
   width: 15vw;
   height: 2vw;
   font-size: 1vw;
+  clear: left;
 }
 
 #chat_input_div button{
@@ -296,18 +284,6 @@ body {
   #chat_display_div ul li{
     list-style: none;
     font-size: 3.5vw;
-  }
-
-  #chat_input_div p{
-    display: inline-block;
-    border-top: 1px solid #E1A503;
-    border-bottom: 1px solid #E1A503;
-    font-size: 3vw;
-    padding: 2.5vw;
-    width: 15vw;
-    background-color: white;
-    vertical-align: middle;
-    float: none;
   }
 
   #to{
