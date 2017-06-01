@@ -51,6 +51,10 @@ export const clearChat = ()=>({
   type: "clearChat"
 })
 
+export const clearOnlyChat = ()=>({
+  type: "clearOnlyChat"
+})
+
 export const toggleChat = ()=>({
   type: "toggleChat"
 })

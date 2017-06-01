@@ -30,7 +30,6 @@ function Person (name, id){
 
 io.on('connection', function(socket){
   socket.on("join", function(screenName){
-    console.log(screenName, "join", socket.id)
     socket.screenName = screenName;
     var person = new Person(screenName, socket.id);
     people.push(person);

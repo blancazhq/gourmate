@@ -57,6 +57,10 @@ const AppLayoutReducer = (state=initState, action)=>{
       chatmessage: [],
       people: null
     })
+  }else if(action.type==="clearOnlyChat"){
+    nextState = Object.assign({}, state, {
+      chatmessage: []
+    })
   }else if(action.type==="toggleChat"){
     nextState = Object.assign({}, state, {
       showChat: !state.showChat

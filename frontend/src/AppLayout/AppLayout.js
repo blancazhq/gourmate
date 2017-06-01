@@ -14,6 +14,7 @@ class AppLayout extends React.Component {
       if(this.props.signin.id){
         this.props.getInboxData(this.props.signin.id, this.props.signin.token);
         this.props.socketJoin(this.props.signin.name);
+        this.props.clearOnlyChat();
       }
     }, 500)
 
