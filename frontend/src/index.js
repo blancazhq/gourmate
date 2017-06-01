@@ -39,12 +39,7 @@ let store=Redux.createStore(reducer,
   )
 );
 
-persistStore(store, { storage: new CookieStorage({
-    expiration: {
-      'default': 365 * 86400 // Cookies expire after one year
-    }
-  })
-})
+persistStore(store)
 
 
 ReactDOM.render(
