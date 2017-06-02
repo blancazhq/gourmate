@@ -75,7 +75,7 @@ class Meal extends React.Component {
           </div>
 
           <div id="meal_join_info_div">
-            {(status === "not watched" || status === "watched") && currentuserid !== data.hostid ? <div id="meal_join_div">
+            {((status === "not watched" || status === "watched") && currentuserid !== data.hostid) || !currentuserid ? <div id="meal_join_div">
               <div id="meal_join_content_div">
                 <h4>Interested? Join this meal</h4>
                 <label>guest number: </label><input id="join_meal_number" type="number" onChange={this.props.quantityChange} value={this.props.meal.quantity} max={data.peoplelimit - data.spottaken} min="0"/>
